@@ -1,6 +1,6 @@
 # Globe vs Flat Earth
 
-Live site: https://nicolasbitaudeau-ui.github.io/globe-vs-flat/
+Live site: https://nikbtd.github.io/globe-vs-flat/
 
 Two models of the Earth, side by side: the globe and the flat Earth (Gleason map). Pick any place and time and compare the sky each model predicts with the real sky.
 
