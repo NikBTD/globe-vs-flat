@@ -109,6 +109,20 @@ html[lang="fr"] .toolbar { gap: 5px; padding: 10px 10px; } html[lang="fr"] .grp 
 .shell { display: grid; grid-template-columns: 1fr; }
 @media (max-width: 999px) { .stage { order: -1; } .rail { border-right: 0; border-top: 1px solid var(--line); } }
 @media (min-width: 1000px) { .shell { grid-template-columns: 318px minmax(0, 1fr); } }
+/* Hide/show button for the left panel: sits on the panel's edge; with the panel hidden the views take the full width. */
+.shell { position: relative; }
+.rail-btn { display: none; }
+@media (min-width: 1000px) {
+  .rail-btn { display: grid; place-items: center; position: absolute; top: 12px; left: 318px; transform: translateX(-50%); z-index: 6;
+    width: 24px; height: 24px; padding: 0; border-radius: 50%; border: 1px solid var(--line); background: var(--panel-2); color: var(--globe);
+    font-size: 14px; line-height: 1; cursor: pointer; }
+  .rail-btn:hover { border-color: var(--globe); box-shadow: 0 0 10px rgba(56, 225, 255, 0.35); }
+  .shell.norail { grid-template-columns: minmax(0, 1fr); }
+  .shell.norail .rail { display: none; }
+  .shell.norail .rail-btn { left: 4px; transform: none; }
+  .shell.norail .stage { padding-left: 36px; }
+  .shell.norail .view { height: clamp(320px, 66vh, 820px); }
+}
 
 .rail { border-right: 1px solid var(--line); padding: 4px 16px 24px; display: flex; flex-direction: column; min-width: 0; }
 @media (min-width: 1000px) { .rail { max-height: 100vh; overflow-y: auto; position: sticky; top: 0; } }
@@ -282,6 +296,7 @@ td .delta { display: block; font-size: 11px; }
 </dialog>
 
 <div class="shell">
+  <button class="rail-btn" id="railBtn">«</button>
   <aside class="rail">
     <section>
       <h2>Observer</h2>
@@ -3269,7 +3284,7 @@ function initHelp() {
 // ---------- language switch
 // Fixed page text is captured once in English, then swapped from the FR dictionary (plain text) or FRH (blocks with markup).
 const I18N = { nodes: [], attrs: [], html: [] };
-const DYNAMIC = new Set(["eclipse", "play", "flatSub", "tz", "place", "distA", "distB", "flights", "savedList", "cmpBody", "cmpWhere", "eclipseInfo", "faceNote", "feNote", "feSliders", "solarTime", "altOut"]);
+const DYNAMIC = new Set(["eclipse", "play", "flatSub", "tz", "place", "distA", "distB", "flights", "savedList", "cmpBody", "cmpWhere", "eclipseInfo", "faceNote", "feNote", "feSliders", "solarTime", "altOut", "railBtn"]);
 function captureStatic() {
   const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: n => {
     for (let e = n.parentElement; e; e = e.parentElement) { if (e.tagName === "SCRIPT" || e.tagName === "STYLE" || e.hasAttribute("data-trh") || DYNAMIC.has(e.id)) return NodeFilter.FILTER_REJECT; }
@@ -3289,7 +3304,17 @@ function applyStatic() {
   document.title = L("Globe vs Flat Earth", "Globe vs Terre Plate");
   document.querySelectorAll("#segUnits button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === UNITS)));
   document.querySelectorAll("#segLang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === LANG)));
+  setRail(railOpen);
 }
+// ---------- left panel hide/show (choice remembered)
+let railOpen = true;
+try { railOpen = localStorage.getItem("gvf-rail") !== "0"; } catch (e) {}
+function setRail(open) {
+  railOpen = open; document.querySelector(".shell").classList.toggle("norail", !open);
+  const b = $("railBtn"), t = open ? L("Hide the panel", "Masquer le panneau") : L("Show the panel", "Afficher le panneau");
+  b.textContent = open ? "«" : "»"; b.title = t; b.setAttribute("aria-label", t); b.setAttribute("aria-expanded", String(open));
+}
+$("railBtn").addEventListener("click", () => { setRail(!railOpen); try { localStorage.setItem("gvf-rail", railOpen ? "1" : "0"); } catch (e) {} });
 function setLang(v) {
   LANG = v; try { localStorage.setItem("gvf-lang", v); } catch (e) {}
   applyStatic(); buildLists(); buildTZ(); renderSaved(); setPlayText(); syncFE(); rebuildRoutes();
