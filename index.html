@@ -55,6 +55,10 @@ button, select, input { font: inherit; color: inherit; }
 
 .toolbar { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 16px; background: var(--bar-bg); border-bottom: 1px solid var(--line); }
 .grp { --c: var(--c-ui); display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 6px 10px; border-radius: var(--r); background: var(--grp-bg); border: 1px solid var(--line); border-top: 3px solid var(--c); }
+.tip { position: fixed; z-index: 50; max-width: 260px; padding: 6px 9px; border-radius: 7px; background: #141a26; border: 1px solid var(--c-ui, #b78cff);
+  color: var(--ink, #e8ecf4); font-size: 12px; line-height: 1.35; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.12s; }
+.tip.on { opacity: 1; }
+[data-tip] { cursor: help; } button[data-tip] { cursor: pointer; }
 .grp-model { --c: var(--c-model); } .grp-view { --c: var(--c-view); } .grp-sky { --c: var(--c-sky); }
 .grp-h { font-family: var(--f-display); font-weight: 800; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c, var(--muted)); }
 .sub-h { font-size: 14px; font-weight: 600; color: #c3cde0; margin-left: 4px; }
@@ -227,25 +231,25 @@ td .delta { display: block; font-size: 11px; }
     <h1 data-trh="title"><span class="g">Globe</span> <span class="vs">vs</span> <span class="f">Flat</span> <span class="e">Earth</span></h1>
     <p class="tagline">Two models, one sky. Pick a place and a time, then check which model matches what you see outside.</p>
   </div>
-  <div class="seg langseg" id="segUnits" role="group" aria-label="Units"><button data-v="metric" aria-pressed="true">km</button><button data-v="imperial" aria-pressed="false">mi</button></div>
-  <div class="seg langseg" id="segLang" role="group" aria-label="Language / Langue"><button data-v="en" aria-pressed="true">EN</button><button data-v="fr" aria-pressed="false">FR</button></div>
+  <div class="seg langseg" id="segUnits" role="group" aria-label="Units"><button data-v="metric" data-tip="Kilometres and metres" aria-pressed="true">km</button><button data-v="imperial" data-tip="Miles, feet and mph" aria-pressed="false">mi</button></div>
+  <div class="seg langseg" id="segLang" role="group" aria-label="Language / Langue"><button data-v="en" data-tip="English" aria-pressed="true">EN</button><button data-v="fr" data-tip="Français" aria-pressed="false">FR</button></div>
   <button class="helpbtn" id="helpBtn" aria-label="Help" title="Help: what this page is and how to use it">?</button>
 </header>
 <nav class="toolbar" aria-label="Display options">
-  <div class="grp"><span class="grp-h">Model</span>
-    <div class="seg" id="segModels"><button data-v="both" aria-pressed="true">Side by side</button><button data-v="globe" aria-pressed="false">Globe</button><button data-v="flat" aria-pressed="false">Flat</button></div></div>
-  <div class="grp"><span class="grp-h">View</span>
-    <div class="seg" id="segView"><button data-v="observer" aria-pressed="true">Observer</button><button data-v="space" aria-pressed="false">Space</button></div></div>
-  <div class="grp"><span class="grp-h">Scale</span>
-    <div class="seg" id="segScale"><button data-v="enlarged" aria-pressed="true">Enlarged</button><button data-v="true" aria-pressed="false">True</button></div></div>
-  <div class="grp"><span class="grp-h">Stars</span>
-    <div class="seg" id="segStars"><button data-v="off" aria-pressed="false">Off</button><button data-v="on" aria-pressed="true">On</button><button data-v="names" aria-pressed="false">Names</button><button data-v="trails" aria-pressed="false">Trails</button></div></div>
-  <div class="grp"><span class="grp-h">Planets</span>
-    <div class="seg" id="segPlanets"><button data-v="off" aria-pressed="false">Off</button><button data-v="on" aria-pressed="true">On</button><button data-v="paths" aria-pressed="false">Paths</button></div></div>
-  <div class="grp"><span class="grp-h">Solar filter</span>
-    <div class="seg" id="segFilter"><button data-v="off" aria-pressed="true">Off</button><button data-v="on" aria-pressed="false">On</button></div></div>
-  <div class="grp"><span class="grp-h">Labels</span>
-    <div class="seg" id="segLabels"><button data-v="on" aria-pressed="true">On</button><button data-v="off" aria-pressed="false">Off</button></div></div>
+  <div class="grp"><span class="grp-h" data-tip="Which model to show">Model</span>
+    <div class="seg" id="segModels"><button data-v="both" data-tip="Show both models next to each other" aria-pressed="true">Side by side</button><button data-v="globe" data-tip="Show only the Globe model, full width" aria-pressed="false">Globe</button><button data-v="flat" data-tip="Show only the Flat Earth model, full width" aria-pressed="false">Flat</button></div></div>
+  <div class="grp"><span class="grp-h" data-tip="Where you look from">View</span>
+    <div class="seg" id="segView"><button data-v="observer" data-tip="See the sky as someone standing at the chosen place" aria-pressed="true">Observer</button><button data-v="space" data-tip="See the whole planet, Sun and Moon from far away" aria-pressed="false">Space</button></div></div>
+  <div class="grp"><span class="grp-h" data-tip="How big the Sun and Moon look in Space view">Scale</span>
+    <div class="seg" id="segScale"><button data-v="enlarged" data-tip="Space view: Sun and Moon drawn bigger so you can see them" aria-pressed="true">Enlarged</button><button data-v="true" data-tip="Space view: real sizes and distances" aria-pressed="false">True</button></div></div>
+  <div class="grp"><span class="grp-h" data-tip="Stars on both views">Stars</span>
+    <div class="seg" id="segStars"><button data-v="off" data-tip="Hide the stars" aria-pressed="false">Off</button><button data-v="on" data-tip="Show the brightest stars and constellations" aria-pressed="true">On</button><button data-v="names" data-tip="Stars with their names" aria-pressed="false">Names</button><button data-v="trails" data-tip="Stars leave trails as time plays" aria-pressed="false">Trails</button></div></div>
+  <div class="grp"><span class="grp-h" data-tip="Mercury to Neptune on both views">Planets</span>
+    <div class="seg" id="segPlanets"><button data-v="off" data-tip="Hide the planets" aria-pressed="false">Off</button><button data-v="on" data-tip="Show the planets at their real positions" aria-pressed="true">On</button><button data-v="paths" data-tip="Each planet's path over 4 months: solid = past, dotted = future" aria-pressed="false">Paths</button></div></div>
+  <div class="grp"><span class="grp-h" data-tip="Look straight at the Sun safely">Solar filter</span>
+    <div class="seg" id="segFilter"><button data-v="off" data-tip="Normal Sun with its glare" aria-pressed="true">Off</button><button data-v="on" data-tip="Remove the glare to see the Sun's disc, as through eclipse glasses" aria-pressed="false">On</button></div></div>
+  <div class="grp"><span class="grp-h" data-tip="Names on the views">Labels</span>
+    <div class="seg" id="segLabels"><button data-v="on" data-tip="Show names on the views" aria-pressed="true">On</button><button data-v="off" data-tip="Hide names on the views" aria-pressed="false">Off</button></div></div>
 </nav>
 <dialog id="help" aria-labelledby="helpTitle">
   <div class="help-head">
@@ -2040,7 +2044,36 @@ const FR = {
 "South Pole (Amundsen-Scott station)": "Pôle Sud (base Amundsen-Scott)",
 "Syene (Aswan), Egypt": "Syène (Assouan), Égypte",
 "Alexandria, Egypt": "Alexandrie, Égypte",
-"Union Glacier Camp, Antarctica": "Camp d'Union Glacier, Antarctique"
+"Union Glacier Camp, Antarctica": "Camp d'Union Glacier, Antarctique",
+"Show both models next to each other": "Montrer les deux modèles côte à côte",
+"Show only the Globe model, full width": "Montrer seulement le Globe, en pleine largeur",
+"Show only the Flat Earth model, full width": "Montrer seulement la Terre Plate, en pleine largeur",
+"See the sky as someone standing at the chosen place": "Voir le ciel comme une personne debout au lieu choisi",
+"See the whole planet, Sun and Moon from far away": "Voir toute la planète, le Soleil et la Lune de loin",
+"Space view: Sun and Moon drawn bigger so you can see them": "Vue de l'espace : Soleil et Lune agrandis pour être visibles",
+"Space view: real sizes and distances": "Vue de l'espace : vraies tailles et distances",
+"Hide the stars": "Masquer les étoiles",
+"Show the brightest stars and constellations": "Afficher les étoiles les plus brillantes et les constellations",
+"Stars with their names": "Les étoiles avec leur nom",
+"Stars leave trails as time plays": "Les étoiles laissent une traînée pendant la lecture",
+"Hide the planets": "Masquer les planètes",
+"Show the planets at their real positions": "Afficher les planètes à leur vraie position",
+"Each planet's path over 4 months: solid = past, dotted = future": "Le trajet de chaque planète sur 4 mois : plein = passé, pointillé = avenir",
+"Normal Sun with its glare": "Soleil normal, avec son éblouissement",
+"Remove the glare to see the Sun's disc, as through eclipse glasses": "Supprimer l'éblouissement pour voir le disque du Soleil, comme avec des lunettes d'éclipse",
+"Show names on the views": "Afficher les noms sur les vues",
+"Hide names on the views": "Masquer les noms sur les vues",
+"Kilometres and metres": "Kilomètres et mètres",
+"Miles, feet and mph": "Miles, pieds et mph",
+"English": "Anglais",
+"Français": "Français",
+"Which model to show": "Quel modèle afficher",
+"Where you look from": "D'où vous regardez",
+"How big the Sun and Moon look in Space view": "Taille du Soleil et de la Lune en vue de l'espace",
+"Stars on both views": "Les étoiles dans les deux vues",
+"Mercury to Neptune on both views": "De Mercure à Neptune dans les deux vues",
+"Look straight at the Sun safely": "Regarder le Soleil en face sans danger",
+"Names on the views": "Les noms sur les vues"
 };
 const FRH = {"title": "<span class=\"g\">Globe</span> <span class=\"vs\">vs</span> <span class=\"e\">Terre</span> <span class=\"f\">Plate</span>", "sources": "<b>Sources :</b> positions réelles du Soleil et de la Lune d'après <a href=\"https://github.com/cosinekitty/astronomy\">Astronomy Engine</a> de Don Cross (MIT). Étoiles du catalogue Hipparcos via <a href=\"https://github.com/ofrohn/d3-celestial\">d3-celestial</a> d'Olaf Frohn (BSD). Images de la Terre : NASA Blue Marble, Black Marble, données d'altitude et carte de la Lune de Lunar Reconnaissance Orbiter (domaine public). Côtes : Natural Earth (domaine public). Durées de vol : Flightradar24 (octobre 2026). Rendu 3D : three.js.", "support": "<b>Soutenir ce projet :</b> ce site est gratuit, sans publicité ni pistage. S'il vous est utile, vous pouvez <a href=\"https://ko-fi.com/nikbtd\" target=\"_blank\" rel=\"noopener\">le soutenir sur Ko-fi</a> et aider à financer la suite, par exemple une application pour téléphone.", "help0": "\n    <h2 id=\"helpTitle\">Globe vs Terre Plate : à quoi sert cette page</h2>\n    <p>Deux modèles de la Terre, côte à côte : le <b class=\"cg\">Globe (G)</b> et la <b class=\"cf\">Terre Plate (TP)</b> sur la carte de Gleason. Choisissez n'importe quel lieu et moment : chaque modèle affiche le ciel qu'il prédit (Soleil, Lune, étoiles et horizon). Le tableau sous les vues place chaque prédiction à côté du vrai ciel, pour voir quel modèle correspond. Une suggestion : allez dehors et comparez avec ce que vous observez.</p>\n    <h3>Comment chaque modèle est construit</h3>\n    <ul>\n      <li><b>Vrai ciel</b> : Astronomy Engine, des éphémérides qui collent aux observations des télescopes (à moins d'une minute d'arc près), y compris la courbure de la lumière par l'air.</li>\n      <li><b class=\"cg\">Globe</b> : simple géométrie des sphères, calculée directement dans cette page. Le Soleil est la seule lumière : le jour, la nuit, les phases de la Lune et les éclipses en découlent d'eux-mêmes.</li>\n      <li><b class=\"cf\">Terre Plate</b> : dans sa version la plus favorable. Il utilise le vrai point de la Terre situé sous le Soleil et sous la Lune, et les place tous deux à 4 828 km (3 000 miles) au-dessus de la carte de Gleason, chacun large de 51 km. La nuit suppose que le Soleil de la Terre Plate est un « projecteur » : il fait noir à plus d'environ 10 000 km du point situé sous le Soleil (réglable). Les étoiles sont sur un dôme (le « firmament ») haut de 10 000 km au-dessus du pôle Nord, qui redescend jusqu'au « mur de glace » en Antarctique. Vous pouvez changer ces chiffres dans <i>Réglages du modèle Terre Plate</i>.</li>\n    </ul>\n    <p>Abréviations dans les vues : <b class=\"cg\">G</b> signifie Globe et <b class=\"cf\">TP</b> Terre Plate. <i>Soleil TP</i> et <i>Lune TP</i> sont le Soleil et la Lune du modèle Terre Plate. Sur la vue plate, les cercles rouge et bleu marqués <i>Soleil G</i> et <i>Lune G</i> montrent où sont le vrai Soleil et la vraie Lune, comme le prédit le modèle Globe.</p>\n    <p> Horizon : l'air courbe légèrement la lumière autour de la Terre, si bien que le vrai horizon est environ 7 % plus loin que ne le donne la géométrie seule. Sur un disque plat, il n'y aurait pas d'horizon du tout, seulement de la brume.</p>\n    <p>Cette page est gratuite, sans publicité ni pistage. Pour aider la suite du projet, par exemple une application pour téléphone, vous pouvez <a href=\"https://ko-fi.com/nikbtd\" target=\"_blank\" rel=\"noopener\">la soutenir sur Ko-fi</a>.</p>\n    <p class=\"help-src\">Étoiles : les 520 plus brillantes (magnitude 4 et moins) du catalogue Hipparcos, avec les lignes de 18 constellations, via d3-celestial d'Olaf Frohn (BSD). Images de la Terre : NASA Blue Marble et Black Marble. Carte de la Lune : NASA Lunar Reconnaissance Orbiter.</p>\n  ", "help1": "\n    <h2>Options</h2>\n    <h3>Barre du haut</h3>\n    <dl>\n      <dt>Modèle</dt><dd>Les deux modèles côte à côte, ou un seul en pleine largeur.</dd>\n      <dt>Vue</dt><dd><i>Observateur</i> : ce que vous verriez sur place. <i>Espace</i> : la planète entière vue de l'extérieur.</dd>\n      <dt>Échelle</dt><dd><i>Agrandie</i> rend le Soleil et la Lune visibles en vue de l'espace. <i>Réelle</i> montre les vraies tailles et distances.</dd>\n      <dt>Étoiles</dt><dd>Non, oui, avec les noms, ou <i>Traînées</i> : le chemin que les étoiles tracent dans le ciel pendant la lecture.</dd>\n      <dt>Planètes</dt><dd>Affiche Mercure à Neptune à leur vraie position parmi les étoiles. Sur le modèle Terre Plate, elles sont sur le firmament avec les étoiles. <i>Trajets</i> montre leur chemin parmi les étoiles sur deux mois de part et d'autre de la date, en trait plein pour le passé et en pointillés pour l'avenir, avec un point le 1er de chaque mois : on y voit les planètes faire marche arrière.</dd>\n      <dt>Filtre solaire</dt><dd>Supprime l'éblouissement du Soleil pour voir son disque, par exemple pendant une éclipse.</dd>\n      <dt>Étiquettes</dt><dd>Affiche ou masque les noms sur les vues.</dd>\n      <dt>km | mi (en haut à droite)</dt><dd>Affiche les distances, altitudes et vitesses en kilomètres ou en miles (pieds pour les basses altitudes, mph pour les vitesses).</dd>\n      <dt>EN | FR (en haut à droite)</dt><dd>Passe toute la page de l'anglais au français, et inversement.</dd>\n    </dl>\n    <h3>Panneau de gauche</h3>\n    <dl>\n      <dt>Observateur</dt><dd>Choisissez un lieu, tapez des coordonnées ou réglez l'altitude, du sol jusqu'à l'espace. Les boutons <i>Face à</i> tournent la vue vers le Soleil, la Lune, l'étoile Polaire ou la Croix du Sud ; <i>Suivre</i> l'y maintient, et peut aussi suivre le Soleil TP, la Lune TP, Vénus, Mars, Jupiter et Saturne.</dd>\n      <dt>Lieux enregistrés</dt><dd>Gardez vos propres lieux dans ce navigateur.</dd>\n      <dt>Date et heure</dt><dd>N'importe quelle date, dans le fuseau horaire de votre choix (le vôtre par défaut), avec une lecture à plusieurs vitesses. <i>Événements réels</i> mène à des éclipses et observations célèbres.</dd>\n      <dt>Distance</dt><dd>La distance entre deux villes sur chaque modèle, tracée selon le plus court chemin de chaque modèle. Cochez la case pour voir les deux trajets sur les deux modèles ; Effacer retire les lignes.</dd>\n      <dt>Vrais vols</dt><dd>De vrais vols avec leur durée réelle, et la vitesse qu'il faudrait sur chaque modèle.</dd>\n      <dt>Réglages du modèle Terre Plate</dt><dd>Essayez d'autres hauteurs et tailles pour le Soleil TP, la Lune TP et le firmament, et d'autres tailles pour le projecteur solaire.</dd>\n    </dl>\n    <p class=\"help-src\">Souris : glissez pour regarder autour (ou tourner autour de la planète en vue de l'espace), molette pour zoomer. En vue de l'espace, ou à partir de 2 000 km, cliquez un point de la planète pour y aller. Chaque section du panneau de gauche se replie quand on clique sur son titre.</p>\n  "};
 
@@ -3290,9 +3323,9 @@ function captureStatic() {
     for (let e = n.parentElement; e; e = e.parentElement) { if (e.tagName === "SCRIPT" || e.tagName === "STYLE" || e.hasAttribute("data-trh") || DYNAMIC.has(e.id)) return NodeFilter.FILTER_REJECT; }
     return n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; } });
   for (let n; (n = w.nextNode());) I18N.nodes.push([n, n.nodeValue]);
-  document.querySelectorAll("[aria-label], [title], optgroup[label]").forEach(e => {
+  document.querySelectorAll("[aria-label], [title], [data-tip], optgroup[label]").forEach(e => {
     if (DYNAMIC.has(e.id)) return;
-    for (const a of ["aria-label", "title", "label"]) if (e.hasAttribute(a) && !(a === "label" && e.tagName !== "OPTGROUP")) I18N.attrs.push([e, a, e.getAttribute(a)]);
+    for (const a of ["aria-label", "title", "label", "data-tip"]) if (e.hasAttribute(a) && !(a === "label" && e.tagName !== "OPTGROUP")) I18N.attrs.push([e, a, e.getAttribute(a)]);
   });
   document.querySelectorAll("[data-trh]").forEach(e => I18N.html.push([e, e.innerHTML]));
 }
@@ -3306,6 +3339,22 @@ function applyStatic() {
   document.querySelectorAll("#segLang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === LANG)));
   setRail(railOpen);
 }
+// ---------- hover tips on the top bar (data-tip, translated with the rest of the page)
+(() => {
+  const tip = document.createElement("div"); tip.className = "tip"; tip.setAttribute("role", "tooltip"); document.body.appendChild(tip);
+  let timer = 0, cur = null;
+  const hide = () => { clearTimeout(timer); cur = null; tip.classList.remove("on"); };
+  document.addEventListener("pointerover", e => {
+    if (e.pointerType === "touch") return;
+    const el = e.target.closest("[data-tip]"); if (el === cur) return; hide(); if (!el) return; cur = el;
+    timer = setTimeout(() => {
+      tip.textContent = el.getAttribute("data-tip"); tip.classList.add("on");
+      const r = el.getBoundingClientRect(), w = tip.offsetWidth;
+      tip.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + "px"; tip.style.top = (r.bottom + 8) + "px";
+    }, 300);
+  });
+  document.addEventListener("pointerdown", hide); addEventListener("scroll", hide, true);
+})();
 // ---------- left panel hide/show (choice remembered)
 let railOpen = true;
 try { railOpen = localStorage.getItem("gvf-rail") !== "0"; } catch (e) {}
