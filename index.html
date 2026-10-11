@@ -318,7 +318,7 @@ td .delta { display: block; font-size: 11px; }
       <p class="hint">Observer view: drag to look around, scroll to zoom. From 2,000 km up, or in Space view, click any point to go there. Space view: drag to orbit.</p>
     </section>
 
-    <section class="saved">
+    <section class="saved" data-closed>
       <h2>Saved places</h2>
       <button class="btn" id="saveHere">Save current location</button>
       <ul id="savedList"></ul>
@@ -3242,7 +3242,7 @@ function setSeg(id, key, val) {
   S[key] = val;
   document.querySelectorAll(`#${id} button`).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === val)));
 }
-// Turn each left-panel section into a foldable block: open by default, except Distance and Real flight routes.
+// Turn each left-panel section into a foldable block: open by default, except Saved places, Distance and Real flight routes.
 function makeFoldable() {
   document.querySelectorAll(".rail section").forEach(sec => {
     const h = sec.querySelector(":scope > h2"); if (!h) return;
