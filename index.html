@@ -177,8 +177,12 @@ td .delta { display: block; font-size: 11px; }
 .pill.no { background: rgba(255, 122, 122, 0.14); }
 .foot { padding: 4px 14px 12px; color: var(--muted); font-size: 12px; max-width: 90ch; }
 .foot p { margin: 4px 0; }
-.note { position: absolute; top: 68px; left: 10px; right: 10px; max-width: 46ch; padding: 7px 10px; border-radius: 6px; background: rgba(10, 14, 26, 0.78); font-size: 14px; pointer-events: none; }
-.note:empty { display: none; }
+.note { position: absolute; top: 68px; left: 10px; right: 10px; max-width: 46ch; padding: 7px 30px 7px 10px; border-radius: 6px; background: rgba(10, 14, 26, 0.78); font-size: 14px; }
+.note[hidden] { display: none; }
+/* Close button: shows when the pointer is over the note (always on touch screens). */
+.note-x { position: absolute; top: 5px; right: 5px; width: 20px; height: 20px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.45); background: rgba(10, 14, 26, 0.9); color: #fff; font-size: 14px; line-height: 17px; padding: 0; cursor: pointer; opacity: 0; transition: opacity 0.15s; }
+.note:hover .note-x, .note-x:focus-visible { opacity: 1; }
+@media (hover: none) { .note-x { opacity: 0.8; } }
 .flightbox { position: absolute; left: 10px; right: 10px; bottom: 44px; max-width: 66ch; padding: 6px 10px; border-radius: 6px; background: rgba(10, 14, 26, 0.8); font-family: var(--f-data); font-size: 12.5px; line-height: 1.5; pointer-events: none; }
 .flightbox:empty { display: none; }
 /* Foldable left-panel sections (all open by default). */
@@ -341,7 +345,7 @@ td .delta { display: block; font-size: 11px; }
       <p class="hint ev-info" id="eclipseInfo"></p>
     </section>
 
-    <section>
+    <section data-closed>
       <h2>Distance</h2>
       <div class="row">
         <div class="field"><label for="distA">From</label><select id="distA"></select></div>
@@ -355,7 +359,7 @@ td .delta { display: block; font-size: 11px; }
       <div class="row" style="justify-content:space-between;gap:8px"><label class="row" style="font-size:12.5px;cursor:pointer"><input type="checkbox" id="drawDist"> Draw on both models</label><button class="btn" id="eraseDist">Erase</button></div>
     </section>
 
-    <section>
+    <section data-closed>
       <h2>Real flight routes</h2>
       <p class="hint">Tick a route to see its distance, real flight time and the speed it needs on each model.</p>
       <div id="flights" style="display:flex;flex-direction:column;gap:8px"></div>
@@ -363,7 +367,7 @@ td .delta { display: block; font-size: 11px; }
     </section>
 
     <section>
-      <details id="feSettings">
+      <details id="feSettings" open>
         <summary><h2 style="display:inline">Flat model settings</h2></summary>
         <p class="hint">Flat-earthers never agree on these numbers, so try your own. The defaults are the usual claims: Sun and Moon 51 km wide, 4,828 km (3,000 miles) up.</p>
         <div id="feSliders"></div>
@@ -378,7 +382,7 @@ td .delta { display: block; font-size: 11px; }
       <div class="view" id="viewGlobe">
         <canvas id="cGlobe"></canvas>
         <div class="tag"><b>Globe model</b><span>Earth, Moon and Sun from Astronomy Engine</span></div>
-        <div class="note" id="noteGlobe"></div>
+        <div class="note" id="noteGlobe" hidden><span class="note-t"></span><button class="note-x" aria-label="Close" title="Close">×</button></div>
         <div class="flightbox" id="fbGlobe"></div>
         <div class="compass" id="compassGlobe"></div>
         <div class="hud" id="hudGlobe"></div>
@@ -386,7 +390,7 @@ td .delta { display: block; font-size: 11px; }
       <div class="view" id="viewFlat">
         <canvas id="cFlat"></canvas>
         <div class="tag"><b>Flat model</b><span id="flatSub">Gleason map, local Sun and Moon at 4,828 km</span></div>
-        <div class="note" id="noteFlat"></div>
+        <div class="note" id="noteFlat" hidden><span class="note-t"></span><button class="note-x" aria-label="Close" title="Close">×</button></div>
         <div class="flightbox" id="fbFlat"></div>
         <div class="compass" id="compassFlat"></div>
         <div class="hud" id="hudFlat"></div>
@@ -3115,8 +3119,20 @@ function updateNotes() {
     if (rs.alt > -0.5 && cov > 0.02) f = L(`Real solar eclipse here: the Moon hides ${Math.round(cov * 100)}% of the Sun. The flat Moon sits ${fx(fsep, fsep < 10 ? 1 : 0)}° away from the flat Sun, so the flat model shows no eclipse.`, `Vraie éclipse de Soleil ici : la Lune cache ${Math.round(cov * 100)} % du Soleil. La Lune TP est à ${fx(fsep, fsep < 10 ? 1 : 0)}° du Soleil TP : le modèle Terre Plate ne montre aucune éclipse.`);
     else if (rm.alt > 0 && G.moon.material.uniforms.uTint.value > 0.3) f = tr("Real lunar eclipse: the Moon is in Earth's shadow and turns red. The flat model has no Earth between the Sun and Moon to cast that shadow, so its Moon stays bright.");
   }
-  $("noteGlobe").textContent = g; $("noteFlat").textContent = f;
+  setNote("noteGlobe", g); setNote("noteFlat", f);
 }
+// A note the visitor closed stays closed while it says the same thing (numbers and directions may still change);
+// the next different note shows as usual.
+const noteKey = t => t.replace(/[\d.,°%−-]+/g, "").replace(/\b(N|NE|E|SE|S|SW|SO|W|O|NW|NO)\b/g, "");
+const noteClosed = {};
+function setNote(id, text) {
+  const el = $(id), k = noteKey(text);
+  if (noteClosed[id] && noteClosed[id] !== k) delete noteClosed[id];
+  el.querySelector(".note-t").textContent = text; el.hidden = !text || noteClosed[id] === k;
+}
+document.querySelectorAll(".note-x").forEach(b => b.addEventListener("click", e => {
+  const el = e.currentTarget.parentElement; noteClosed[el.id] = noteKey(el.querySelector(".note-t").textContent); el.hidden = true;
+}));
 
 // ---------- comparison table
 let cache = { key: "", rise: null };
@@ -3226,12 +3242,12 @@ function setSeg(id, key, val) {
   S[key] = val;
   document.querySelectorAll(`#${id} button`).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === val)));
 }
-// Turn each left-panel section into a foldable block, open by default (the flat-model one already is).
+// Turn each left-panel section into a foldable block: open by default, except Distance and Real flight routes.
 function makeFoldable() {
   document.querySelectorAll(".rail section").forEach(sec => {
     const h = sec.querySelector(":scope > h2"); if (!h) return;
     const d = document.createElement("details"), sum = document.createElement("summary"), body = document.createElement("div");
-    d.open = true; body.className = "fold-body";
+    d.open = !sec.hasAttribute("data-closed"); body.className = "fold-body";
     sum.appendChild(h); d.append(sum, body);
     while (sec.firstChild) body.appendChild(sec.firstChild);
     sec.appendChild(d);
