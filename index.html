@@ -204,7 +204,7 @@ td .delta { display: block; font-size: 11px; }
 <header class="top">
   <div class="brand">
     <h1 data-trh="title"><span class="g">Globe</span> <span class="vs">vs</span> <span class="f">Flat</span> <span class="e">Earth</span></h1>
-    <p class="tagline">Two models, one real sky. Pick a place and a time, then check which model matches what you see outside.</p>
+    <p class="tagline">Two models, one sky. Pick a place and a time, then check which model matches what you see outside.</p>
   </div>
   <div class="seg langseg" id="segUnits" role="group" aria-label="Units"><button data-v="metric" aria-pressed="true">km</button><button data-v="imperial" aria-pressed="false">mi</button></div>
   <div class="seg langseg" id="segLang" role="group" aria-label="Language / Langue"><button data-v="en" aria-pressed="true">EN</button><button data-v="fr" aria-pressed="false">FR</button></div>
@@ -238,7 +238,7 @@ td .delta { display: block; font-size: 11px; }
     <ul>
       <li><b>Real sky</b>: Astronomy Engine, an ephemeris that matches telescope observations to well under 1 arc-minute, including the bending of light by the air.</li>
       <li><b class="cg">Globe</b>: plain sphere geometry, directly computed in this page. The Sun is the only light, so day, night, Moon phases and eclipses come out by themselves.</li>
-      <li><b class="cf">Flat</b>: given its strongest version. It uses the real point on Earth under the Sun and Moon, and places both 4,828 km (3,000 miles) above the Gleason map, each 51 km wide. Night assumes the Flat-Earth Sun is a "spotlight": it is dark more than about 10,000 km from the point under the Sun. Stars sit on a dome (the "firmament") 10,000 km high over the North Pole that comes down at the "Ice Wall" in Antarctica. You can change these figures in <i>Flat model settings</i>.</li>
+      <li><b class="cf">Flat</b>: given its strongest version. It uses the real point on Earth under the Sun and Moon, and places both 4,828 km (3,000 miles) above the Gleason map, each 51 km wide. Night assumes the Flat-Earth Sun is a "spotlight": it is dark more than about 10,000 km from the point under the Sun (adjustable). Stars sit on a dome (the "firmament") 10,000 km high over the North Pole that comes down at the "Ice Wall" in Antarctica. You can change these figures in <i>Flat model settings</i>.</li>
     </ul>
     <p>Short names in the views: <b class="cg">GE</b> means Globe Earth and <b class="cf">FE</b> means Flat Earth. <i>FE Sun</i> and <i>FE Moon</i> are the flat model's own Sun and Moon. On the flat view, the red and blue circles labelled <i>GE Sun</i> and <i>GE Moon</i> show where the real Sun and Moon are, as the globe model predicts.</p>
     <p> Horizon: the air bends light slightly round the curve, so the real horizon is about 7% farther than plain geometry gives. On a flat disc there would be no horizon at all, only haze.</p>
@@ -264,7 +264,7 @@ td .delta { display: block; font-size: 11px; }
       <dt>Date and time</dt><dd>Any date, in the time zone you choose (yours by default), with playback at several speeds. <i>Real events</i> jumps to famous eclipses and observations.</dd>
       <dt>Distance</dt><dd>The distance between two cities on each model.</dd>
       <dt>Real flight routes</dt><dd>Real flights with their actual flight times, and the speed each model would need.</dd>
-      <dt>Flat model settings</dt><dd>Try other heights and sizes for the flat Sun, Moon and dome.</dd>
+      <dt>Flat model settings</dt><dd>Try other heights and sizes for the FE Sun, Moon and firmament, and other sizes for the Sun's spotlight.</dd>
     </dl>
     <p class="help-src">Mouse: drag to look around (or to orbit in Space view), scroll to zoom. In Space view, or from 2,000 km up, click any point on the planet to go there. Each section of the left panel folds when you click its title.</p>
   </div>
@@ -1730,7 +1730,7 @@ const TEX = { day: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEB
 // French translations: FR maps each fixed English string to French, FRH holds French versions of blocks with markup.
 const FR = {
 "Globe vs Flat Earth": "Globe vs Terre plate",
-"Two models, one real sky. Pick a place and a time, then check which model matches what you see outside.": "Deux modèles, un seul vrai ciel. Choisissez un lieu et une heure, puis voyez quel modèle correspond à ce que vous observez dehors.",
+"Two models, one sky. Pick a place and a time, then check which model matches what you see outside.": "Deux modèles, un seul ciel. Choisissez un lieu et une heure, puis voyez quel modèle correspond à ce que vous observez dehors.",
 "Model": "Modèle",
 "Side by side": "Côte à côte",
 "Globe": "Globe",
@@ -1797,14 +1797,15 @@ const FR = {
 "Real flight routes": "Vrais vols",
 "Tick a route to see its distance, real flight time and the speed it needs on each model.": "Cochez un vol pour voir sa distance, sa durée réelle et la vitesse qu'il lui faudrait sur chaque modèle.",
 "Lines follow the great-circle route. On the flat map the same route bends into long arcs.": "Les lignes suivent la route du grand cercle. Sur la carte plate, la même route se tord en longs arcs.",
-"Flat model settings": "Réglages du modèle plat",
+"Flat model settings": "Réglages du modèle Terre Plate",
 "Flat-earthers never agree on these numbers, so try your own. The defaults are the usual claims: Sun and Moon 51 km wide, 4,828 km (3,000 miles) up.": "Les platistes ne s'accordent jamais sur ces chiffres : essayez les vôtres. Les valeurs par défaut sont les affirmations habituelles : Soleil et Lune de 51 km de large, à 4 828 km (3 000 miles) d'altitude.",
 "Back to the usual figures": "Revenir aux chiffres habituels",
 "Sun height": "Hauteur du Soleil",
 "Sun width": "Largeur du Soleil",
 "Moon height": "Hauteur de la Lune",
 "Moon width": "Largeur de la Lune",
-"Star dome height": "Hauteur du dôme des étoiles",
+"Firmament height": "Hauteur du firmament",
+"Sun's spotlight radius": "Rayon du projecteur solaire",
 "Globe model": "Modèle globe",
 "Earth, Moon and Sun from Astronomy Engine": "Terre, Lune et Soleil d'après Astronomy Engine",
 "Flat model": "Modèle plat",
@@ -1983,7 +1984,7 @@ const FR = {
 "North Cape at local midnight around the June solstice. The real Sun does not set: it skims 4.8° above the northern horizon, then climbs again. Playing at 1 hour per second. On a globe this happens because the North Pole is tilted towards the Sun. The flat Sun also stays up, but far too high: about 27° at midnight.": "Le cap Nord à minuit (heure locale), vers le solstice de juin. Le vrai Soleil ne se couche pas : il rase l'horizon nord à 4,8°, puis remonte. Lecture à 1 heure par seconde. Sur un globe, cela vient de l'inclinaison du pôle Nord vers le Soleil. Le Soleil plat reste aussi levé, mais bien trop haut : environ 27° à minuit.",
 "The South Pole in June: the real Sun stays about 23° below the horizon all day, so it is night for months, and the stars circle straight overhead (trails switched on). The flat Sun would still hang 10° to 20° above the horizon here, so a flat Earth has no way to give the South Pole months of darkness.": "Le pôle Sud en juin : le vrai Soleil reste environ 23° sous l'horizon toute la journée. C'est la nuit pendant des mois, et les étoiles tournent juste au-dessus de la tête (traînées activées). Le Soleil plat resterait ici 10° à 20° au-dessus de l'horizon : une Terre plate ne peut pas donner des mois d'obscurité au pôle Sud.",
 "June solstice, 240 BC, local noon at Syene. The Sun is almost straight overhead (89.6° up): a well shows no shadow. Eratosthenes compared this with Alexandria, about 840 km north, at the same moment (part 2).": "Solstice de juin, 240 av. J.-C., midi local à Syène. Le Soleil est presque au zénith (89,6°) : un puits ne montre aucune ombre. Ératosthène a comparé avec Alexandrie, à environ 840 km au nord, au même moment (partie 2).",
-"Same solstice noon at Alexandria. A stick casts a shadow: the Sun stands 7.5° from overhead (Eratosthenes measured about 7.2°, 1/50 of a circle). 7.5° for 840 km means a full circle of about 40,000 km: Earth's real size. A flat Earth needs a Sun about 6,600 km up to fit these two cities, but no single height fits a third (try the Flat model settings and the table).": "Même midi de solstice à Alexandrie. Un bâton projette une ombre : le Soleil est à 7,5° du zénith (Ératosthène a mesuré environ 7,2°, soit 1/50 de cercle). 7,5° pour 840 km donnent un tour complet d'environ 40 000 km : la vraie taille de la Terre. Une Terre plate a besoin d'un Soleil à environ 6 600 km pour ces deux villes, mais aucune hauteur unique ne convient à une troisième (essayez les réglages du modèle plat et le tableau).",
+"Same solstice noon at Alexandria. A stick casts a shadow: the Sun stands 7.5° from overhead (Eratosthenes measured about 7.2°, 1/50 of a circle). 7.5° for 840 km means a full circle of about 40,000 km: Earth's real size. A flat Earth needs a Sun about 6,600 km up to fit these two cities, but no single height fits a third (try the Flat model settings and the table).": "Même midi de solstice à Alexandrie. Un bâton projette une ombre : le Soleil est à 7,5° du zénith (Ératosthène a mesuré environ 7,2°, soit 1/50 de cercle). 7,5° pour 840 km donnent un tour complet d'environ 40 000 km : la vraie taille de la Terre. Une Terre plate a besoin d'un Soleil à environ 6 600 km pour ces deux villes, mais aucune hauteur unique ne convient à une troisième (essayez les réglages du modèle Terre Plate et le tableau).",
 "Union Glacier, local midnight in December 2024. The real Sun is still up, low in the south. Playing at 1 hour per second: watch it circle the whole horizon while the flat model's Sun stays roughly north.": "Union Glacier, minuit local en décembre 2024. Le vrai Soleil est encore levé, bas vers le sud. Lecture à 1 heure par seconde : regardez-le faire le tour complet de l'horizon, alors que le Soleil du modèle plat reste à peu près au nord.",
 "North Cape, Norway": "Cap Nord, Norvège",
 "South Pole (Amundsen-Scott station)": "Pôle Sud (base Amundsen-Scott)",
@@ -1991,7 +1992,7 @@ const FR = {
 "Alexandria, Egypt": "Alexandrie, Égypte",
 "Union Glacier Camp, Antarctica": "Camp d'Union Glacier, Antarctique"
 };
-const FRH = {"title": "<span class=\"g\">Globe</span> <span class=\"vs\">vs</span> <span class=\"e\">Terre</span> <span class=\"f\">plate</span>", "sources": "<b>Sources :</b> positions réelles du Soleil et de la Lune d'après <a href=\"https://github.com/cosinekitty/astronomy\">Astronomy Engine</a> de Don Cross (MIT). Étoiles du catalogue Hipparcos via <a href=\"https://github.com/ofrohn/d3-celestial\">d3-celestial</a> d'Olaf Frohn (BSD). Images de la Terre : NASA Blue Marble, Black Marble et données d'altitude (domaine public). Côtes : Natural Earth (domaine public). Durées de vol : Flightradar24 (octobre 2026). Rendu 3D : three.js.", "help0": "\n    <h2 id=\"helpTitle\">Globe vs Terre Plate : à quoi sert cette page</h2>\n    <p>Deux modèles de la Terre, côte à côte : le <b class=\"cg\">Globe (G)</b> et la <b class=\"cf\">Terre Plate (TP)</b> sur la carte de Gleason. Choisissez n'importe quel lieu et moment : chaque modèle affiche le ciel qu'il prédit (Soleil, Lune, étoiles et horizon). Le tableau sous les vues place chaque prédiction à côté du vrai ciel, pour voir quel modèle correspond. Une suggestion : allez dehors et comparez avec ce que vous observez.</p>\n    <h3>Comment chaque modèle est construit</h3>\n    <ul>\n      <li><b>Vrai ciel</b> : Astronomy Engine, des éphémérides qui collent aux observations des télescopes (à moins d'une minute d'arc près), y compris la courbure de la lumière par l'air.</li>\n      <li><b class=\"cg\">Globe</b> : simple géométrie des sphères, calculée directement dans cette page. Le Soleil est la seule lumière : le jour, la nuit, les phases de la Lune et les éclipses en découlent d'eux-mêmes.</li>\n      <li><b class=\"cf\">Terre Plate</b> : dans sa version la plus favorable. Il utilise le vrai point de la Terre situé sous le Soleil et sous la Lune, et les place tous deux à 4 828 km (3 000 miles) au-dessus de la carte de Gleason, chacun large de 51 km. La nuit suppose que le Soleil de la Terre Plate est un « projecteur » : il fait noir à plus d'environ 10 000 km du point situé sous le Soleil. Les étoiles sont sur un dôme (le « firmament ») haut de 10 000 km au-dessus du pôle Nord, qui redescend jusqu'au « mur de glace » en Antarctique. Vous pouvez changer ces chiffres dans <i>Réglages du modèle plat</i>.</li>\n    </ul>\n    <p>Abréviations dans les vues : <b class=\"cg\">G</b> signifie Globe et <b class=\"cf\">TP</b> Terre Plate. <i>Soleil TP</i> et <i>Lune TP</i> sont le Soleil et la Lune du modèle Terre Plate. Sur la vue plate, les cercles rouge et bleu marqués <i>Soleil G</i> et <i>Lune G</i> montrent où sont le vrai Soleil et la vraie Lune, comme le prédit le modèle Globe.</p>\n    <p> Horizon : l'air courbe légèrement la lumière autour de la Terre, si bien que le vrai horizon est environ 7 % plus loin que ne le donne la géométrie seule. Sur un disque plat, il n'y aurait pas d'horizon du tout, seulement de la brume.</p>\n    <p class=\"help-src\">Étoiles : les 520 plus brillantes (magnitude 4 et moins) du catalogue Hipparcos, avec les lignes de 18 constellations, via d3-celestial d'Olaf Frohn (BSD). Images de la Terre : NASA Blue Marble et Black Marble.</p>\n  ", "help1": "\n    <h2>Options</h2>\n    <h3>Barre du haut</h3>\n    <dl>\n      <dt>Modèle</dt><dd>Les deux modèles côte à côte, ou un seul en pleine largeur.</dd>\n      <dt>Vue</dt><dd><i>Observateur</i> : ce que vous verriez sur place. <i>Espace</i> : la planète entière vue de l'extérieur.</dd>\n      <dt>Échelle</dt><dd><i>Agrandie</i> rend le Soleil et la Lune visibles en vue de l'espace. <i>Réelle</i> montre les vraies tailles et distances.</dd>\n      <dt>Étoiles</dt><dd>Non, oui, avec les noms, ou <i>Traînées</i> : le chemin que les étoiles tracent dans le ciel pendant la lecture.</dd>\n      <dt>Filtre solaire</dt><dd>Supprime l'éblouissement du Soleil pour voir son disque, par exemple pendant une éclipse.</dd>\n      <dt>Étiquettes</dt><dd>Affiche ou masque les noms sur les vues.</dd>\n      <dt>km | mi (en haut à droite)</dt><dd>Affiche les distances, altitudes et vitesses en kilomètres ou en miles (pieds pour les basses altitudes, mph pour les vitesses).</dd>\n      <dt>EN | FR (en haut à droite)</dt><dd>Passe toute la page de l'anglais au français, et inversement.</dd>\n    </dl>\n    <h3>Panneau de gauche</h3>\n    <dl>\n      <dt>Observateur</dt><dd>Choisissez un lieu, tapez des coordonnées ou réglez l'altitude, du sol jusqu'à l'espace. Les boutons <i>Face à</i> tournent la vue vers le Soleil, la Lune, l'étoile Polaire ou la Croix du Sud ; <i>Suivre</i> l'y maintient.</dd>\n      <dt>Lieux enregistrés</dt><dd>Gardez vos propres lieux dans ce navigateur.</dd>\n      <dt>Date et heure</dt><dd>N'importe quelle date, dans le fuseau horaire de votre choix (le vôtre par défaut), avec une lecture à plusieurs vitesses. <i>Événements réels</i> mène à des éclipses et observations célèbres.</dd>\n      <dt>Distance</dt><dd>La distance entre deux villes sur chaque modèle.</dd>\n      <dt>Vrais vols</dt><dd>De vrais vols avec leur durée réelle, et la vitesse qu'il faudrait sur chaque modèle.</dd>\n      <dt>Réglages du modèle plat</dt><dd>Essayez d'autres hauteurs et tailles pour le Soleil, la Lune et le dôme plats.</dd>\n    </dl>\n    <p class=\"help-src\">Souris : glissez pour regarder autour (ou tourner autour de la planète en vue de l'espace), molette pour zoomer. En vue de l'espace, ou à partir de 2 000 km, cliquez un point de la planète pour y aller. Chaque section du panneau de gauche se replie quand on clique sur son titre.</p>\n  "};
+const FRH = {"title": "<span class=\"g\">Globe</span> <span class=\"vs\">vs</span> <span class=\"e\">Terre</span> <span class=\"f\">plate</span>", "sources": "<b>Sources :</b> positions réelles du Soleil et de la Lune d'après <a href=\"https://github.com/cosinekitty/astronomy\">Astronomy Engine</a> de Don Cross (MIT). Étoiles du catalogue Hipparcos via <a href=\"https://github.com/ofrohn/d3-celestial\">d3-celestial</a> d'Olaf Frohn (BSD). Images de la Terre : NASA Blue Marble, Black Marble et données d'altitude (domaine public). Côtes : Natural Earth (domaine public). Durées de vol : Flightradar24 (octobre 2026). Rendu 3D : three.js.", "help0": "\n    <h2 id=\"helpTitle\">Globe vs Terre Plate : à quoi sert cette page</h2>\n    <p>Deux modèles de la Terre, côte à côte : le <b class=\"cg\">Globe (G)</b> et la <b class=\"cf\">Terre Plate (TP)</b> sur la carte de Gleason. Choisissez n'importe quel lieu et moment : chaque modèle affiche le ciel qu'il prédit (Soleil, Lune, étoiles et horizon). Le tableau sous les vues place chaque prédiction à côté du vrai ciel, pour voir quel modèle correspond. Une suggestion : allez dehors et comparez avec ce que vous observez.</p>\n    <h3>Comment chaque modèle est construit</h3>\n    <ul>\n      <li><b>Vrai ciel</b> : Astronomy Engine, des éphémérides qui collent aux observations des télescopes (à moins d'une minute d'arc près), y compris la courbure de la lumière par l'air.</li>\n      <li><b class=\"cg\">Globe</b> : simple géométrie des sphères, calculée directement dans cette page. Le Soleil est la seule lumière : le jour, la nuit, les phases de la Lune et les éclipses en découlent d'eux-mêmes.</li>\n      <li><b class=\"cf\">Terre Plate</b> : dans sa version la plus favorable. Il utilise le vrai point de la Terre situé sous le Soleil et sous la Lune, et les place tous deux à 4 828 km (3 000 miles) au-dessus de la carte de Gleason, chacun large de 51 km. La nuit suppose que le Soleil de la Terre Plate est un « projecteur » : il fait noir à plus d'environ 10 000 km du point situé sous le Soleil (réglable). Les étoiles sont sur un dôme (le « firmament ») haut de 10 000 km au-dessus du pôle Nord, qui redescend jusqu'au « mur de glace » en Antarctique. Vous pouvez changer ces chiffres dans <i>Réglages du modèle Terre Plate</i>.</li>\n    </ul>\n    <p>Abréviations dans les vues : <b class=\"cg\">G</b> signifie Globe et <b class=\"cf\">TP</b> Terre Plate. <i>Soleil TP</i> et <i>Lune TP</i> sont le Soleil et la Lune du modèle Terre Plate. Sur la vue plate, les cercles rouge et bleu marqués <i>Soleil G</i> et <i>Lune G</i> montrent où sont le vrai Soleil et la vraie Lune, comme le prédit le modèle Globe.</p>\n    <p> Horizon : l'air courbe légèrement la lumière autour de la Terre, si bien que le vrai horizon est environ 7 % plus loin que ne le donne la géométrie seule. Sur un disque plat, il n'y aurait pas d'horizon du tout, seulement de la brume.</p>\n    <p class=\"help-src\">Étoiles : les 520 plus brillantes (magnitude 4 et moins) du catalogue Hipparcos, avec les lignes de 18 constellations, via d3-celestial d'Olaf Frohn (BSD). Images de la Terre : NASA Blue Marble et Black Marble.</p>\n  ", "help1": "\n    <h2>Options</h2>\n    <h3>Barre du haut</h3>\n    <dl>\n      <dt>Modèle</dt><dd>Les deux modèles côte à côte, ou un seul en pleine largeur.</dd>\n      <dt>Vue</dt><dd><i>Observateur</i> : ce que vous verriez sur place. <i>Espace</i> : la planète entière vue de l'extérieur.</dd>\n      <dt>Échelle</dt><dd><i>Agrandie</i> rend le Soleil et la Lune visibles en vue de l'espace. <i>Réelle</i> montre les vraies tailles et distances.</dd>\n      <dt>Étoiles</dt><dd>Non, oui, avec les noms, ou <i>Traînées</i> : le chemin que les étoiles tracent dans le ciel pendant la lecture.</dd>\n      <dt>Filtre solaire</dt><dd>Supprime l'éblouissement du Soleil pour voir son disque, par exemple pendant une éclipse.</dd>\n      <dt>Étiquettes</dt><dd>Affiche ou masque les noms sur les vues.</dd>\n      <dt>km | mi (en haut à droite)</dt><dd>Affiche les distances, altitudes et vitesses en kilomètres ou en miles (pieds pour les basses altitudes, mph pour les vitesses).</dd>\n      <dt>EN | FR (en haut à droite)</dt><dd>Passe toute la page de l'anglais au français, et inversement.</dd>\n    </dl>\n    <h3>Panneau de gauche</h3>\n    <dl>\n      <dt>Observateur</dt><dd>Choisissez un lieu, tapez des coordonnées ou réglez l'altitude, du sol jusqu'à l'espace. Les boutons <i>Face à</i> tournent la vue vers le Soleil, la Lune, l'étoile Polaire ou la Croix du Sud ; <i>Suivre</i> l'y maintient.</dd>\n      <dt>Lieux enregistrés</dt><dd>Gardez vos propres lieux dans ce navigateur.</dd>\n      <dt>Date et heure</dt><dd>N'importe quelle date, dans le fuseau horaire de votre choix (le vôtre par défaut), avec une lecture à plusieurs vitesses. <i>Événements réels</i> mène à des éclipses et observations célèbres.</dd>\n      <dt>Distance</dt><dd>La distance entre deux villes sur chaque modèle.</dd>\n      <dt>Vrais vols</dt><dd>De vrais vols avec leur durée réelle, et la vitesse qu'il faudrait sur chaque modèle.</dd>\n      <dt>Réglages du modèle Terre Plate</dt><dd>Essayez d'autres hauteurs et tailles pour le Soleil TP, la Lune TP et le firmament, et d'autres tailles pour le projecteur solaire.</dd>\n    </dl>\n    <p class=\"help-src\">Souris : glissez pour regarder autour (ou tourner autour de la planète en vue de l'espace), molette pour zoomer. En vue de l'espace, ou à partir de 2 000 km, cliquez un point de la planète pour y aller. Chaque section du panneau de gauche se replie quand on clique sur son titre.</p>\n  "};
 
 </script>
 <script>
@@ -2038,7 +2039,7 @@ const DISC_R = Math.PI * R_E;          // Gleason map radius: North Pole to the 
 const FE_H = 4828;                     // usual flat-earth Sun and Moon height (3,000 miles)
 const FE_RAD = 25.7;                   // usual flat-earth Sun and Moon radius (32 miles wide)
 // Live flat-model settings (the "Flat model settings" panel); defaults are the usual flat-earth figures.
-const FE_DEFAULTS = { sunH: FE_H, sunD: 2 * FE_RAD, moonH: FE_H, moonD: 2 * FE_RAD, domeH: 10000 };
+const FE_DEFAULTS = { sunH: FE_H, sunD: 2 * FE_RAD, moonH: FE_H, moonD: 2 * FE_RAD, domeH: 10000, spotR: 10000 };
 const FEP = { ...FE_DEFAULTS };
 const feH = sp => sp.body === "Moon" ? FEP.moonH : FEP.sunH, feR = sp => (sp.body === "Moon" ? FEP.moonD : FEP.sunD) / 2;
 // The dome must stay above the Sun and Moon all the way to the tropics they swing out to (about 0.75 of full height there).
@@ -2516,7 +2517,7 @@ const globeStarPos = (x, y, z) => new V3(x, z, -y).multiplyScalar(STAR_R);
 const domeY = r => FEP.domeH * Math.sqrt(Math.max(0, 1 - (r / DISC_R) ** 2));
 const flatStarPos = (x, y, z) => { const [fx, fz] = flatXZ(Math.asin(clamp(z, -1, 1)) / D, Math.atan2(y, x) / D); return new V3(fx, domeY(Math.hypot(fx, fz)) + 15, fz); };
 // Flat-earth "spotlight" night: 1 where the flat Sun's light reaches, 0 far beyond.
-function flatSpotlight(lat, lon) { const [x, z] = flatXZ(lat, lon), [sx, sz] = flatXZ(SUN.lat, SUN.lon); return 1 - smooth(8500, 11500, Math.hypot(x - sx, z - sz)); }
+function flatSpotlight(lat, lon) { const [x, z] = flatXZ(lat, lon), [sx, sz] = flatXZ(SUN.lat, SUN.lon); return 1 - smooth(0.85 * FEP.spotR, 1.15 * FEP.spotR, Math.hypot(x - sx, z - sz)); }
 const lineMat = color => new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.95 });
 
 // Solar eclipse shadow on the globe: at each point of the ground, dim direct sunlight by the share of the Sun's disc
@@ -2584,19 +2585,19 @@ function loadEarthImages() {
 }
 const RELIEF = 40; // km of shading relief for the highest ground
 
-// Flat disc: city lights fade in beyond the spotlight's reach (same 8,500-11,500 km band as flatSpotlight).
-const FLN = { uFSun: { value: new THREE.Vector2() } };
+// Flat disc: city lights fade in beyond the spotlight's reach (same band as flatSpotlight: 85% to 115% of its radius).
+const FLN = { uFSun: { value: new THREE.Vector2() }, uSpotR: { value: 10000 } };
 function addFlatNight(mat) {
   mat.onBeforeCompile = sh => {
     Object.assign(sh.uniforms, FLN);
     sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying vec3 vWorldP;")
       .replace("#include <worldpos_vertex>", "#include <worldpos_vertex>\nvWorldP = (modelMatrix * vec4(transformed, 1.0)).xyz;");
-    sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nvarying vec3 vWorldP; uniform vec2 uFSun;")
+    sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nvarying vec3 vWorldP; uniform vec2 uFSun; uniform float uSpotR;")
       .replace("#include <emissivemap_fragment>", `#ifdef USE_EMISSIVEMAP
   vec4 emissiveColor = texture2D(emissiveMap, vUv);
   emissiveColor.rgb = emissiveMapTexelToLinear(emissiveColor).rgb;
   emissiveColor.rgb *= smoothstep(0.1, 0.3, emissiveColor.r); // lights only: the image tints ice and coasts teal, which has little red
-  totalEmissiveRadiance *= emissiveColor.rgb * smoothstep(8500.0, 11500.0, distance(vWorldP.xz, uFSun));
+  totalEmissiveRadiance *= emissiveColor.rgb * smoothstep(0.85 * uSpotR, 1.15 * uSpotR, distance(vWorldP.xz, uFSun));
 #endif`);
   };
 }
@@ -2866,7 +2867,8 @@ function updateFlat() {
   const sp = flatBodyPos(SUN), mp = flatBodyPos(MOON);
   F.sun.position.copy(sp); F.sun.scale.setScalar(FEP.sunD / 2);
   F.moon.position.copy(mp); F.moon.scale.setScalar(FEP.moonD / 2);
-  F.spot.angle = Math.atan(10000 / FEP.sunH); // the spotlight still lights about 10,000 km around the point under the Sun
+  F.spot.angle = Math.atan(FEP.spotR / FEP.sunH); // the spotlight lights FEP.spotR km around the point under the Sun (10,000 km by default)
+  FLN.uSpotR.value = FEP.spotR;
   F.moon.material.uniforms.uSun.value.copy(sp).sub(mp).normalize();
   F.spot.position.copy(sp); F.spot.target.position.set(sp.x, 0, sp.z); FLN.uFSun.value.set(sp.x, sp.z);
   F.sunDot.position.copy(sp); F.moonDot.position.copy(mp);
@@ -3209,7 +3211,8 @@ let faceNoteFn = null, eventInfoFn = null;
 const FE_SLIDERS = [
   ["sunH", "Sun height", 1000, 9000, 50, "km"], ["sunD", "Sun width", 10, 300, 1, "km"],
   ["moonH", "Moon height", 1000, 9000, 50, "km"], ["moonD", "Moon width", 10, 300, 1, "km"],
-  ["domeH", "Star dome height", 2000, 40000, 100, "km"],
+  ["domeH", "Firmament height", 2000, 40000, 100, "km"],
+  ["spotR", "Sun's spotlight radius", 2000, 20000, 100, "km"],
 ];
 function syncFE() {
   if (!SUN) updateAstro();
