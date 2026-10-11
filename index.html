@@ -301,7 +301,7 @@ td .delta { display: block; font-size: 11px; }
       <div class="row">
         <label for="follow" class="ctl-label" style="align-self:center">Follow</label>
         <select id="follow" aria-label="Keep the view on" style="flex:1">
-          <option value="off">Off</option><option value="sun">The Sun</option><option value="moon">The Moon</option><option value="polaris">Polaris</option><option value="cross">The Southern Cross</option>
+          <option value="off">Off</option><option value="sun">The GE Sun</option><option value="moon">The GE Moon</option><option value="fesun">The FE Sun</option><option value="femoon">The FE Moon</option><option value="polaris">Polaris</option><option value="cross">The Southern Cross</option>
         </select>
       </div>
       <p class="hint" id="faceNote"></p>
@@ -1775,6 +1775,10 @@ const FR = {
 "Follow": "Suivre",
 "The Sun": "Le Soleil",
 "The Moon": "La Lune",
+"The GE Sun": "Le Soleil G",
+"The GE Moon": "La Lune G",
+"The FE Sun": "Le Soleil TP",
+"The FE Moon": "La Lune TP",
 "Polaris": "Polaire",
 "The Southern Cross": "La Croix du Sud",
 "Observer view: drag to look around, scroll to zoom. From 2,000 km up, or in Space view, click any point to go there. Space view: drag to orbit.": "Vue observateur : glissez pour regarder autour, molette pour zoomer. À partir de 2 000 km d'altitude, ou en vue de l'espace, cliquez un point pour y aller. Vue de l'espace : glissez pour tourner autour.",
@@ -3215,6 +3219,7 @@ function starHorizon([, raDeg, dec]) {
 // Follow: keep the view on the real position of a body or star as time runs, never dipping below the visible horizon.
 const FOLLOW = {
   sun: () => realSky(A.Body.Sun, S.date, S.lat, S.lon, S.alt), moon: () => realSky(A.Body.Moon, S.date, S.lat, S.lon, S.alt),
+  fesun: () => flatSky(SUN, S.lat, S.lon, S.alt), femoon: () => flatSky(MOON, S.lat, S.lon, S.alt), // where the flat model puts them
   polaris: () => { const { h } = starHorizon(STARS.n.find(x => x[0] === "Polaris")); return { alt: h.altitude, az: h.azimuth }; },
   cross: () => { const { h } = starHorizon(STARS.c.find(x => x[0] === "Southern Cross")); return { alt: h.altitude, az: h.azimuth }; },
 };
