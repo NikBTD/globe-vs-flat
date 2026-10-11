@@ -63,7 +63,10 @@ button, select, input { font: inherit; color: inherit; }
 .seg button + button { border-left: 1px solid var(--line); }
 .seg button:hover { color: var(--fg); }
 .seg button[aria-pressed="true"] { background: var(--c, var(--fg)); color: var(--on-c); }
-html[lang="fr"] .toolbar { gap: 5px; padding: 10px 10px; } html[lang="fr"] .grp { gap: 6px; padding: 6px 8px; } html[lang="fr"] .grp-h { letter-spacing: 0.03em; } html[lang="fr"] .seg button { padding: 7px 8px; }
+/* Seven option boxes: tighter spacing so the bar stays on one line from about 1,440 px wide (wider screens keep more air). */
+@media (max-width: 1700px) { .toolbar { gap: 6px; padding: 10px 12px; } .grp { gap: 7px; padding: 6px 8px; } .grp-h { letter-spacing: 0.05em; } .seg button { padding: 7px 8px; } }
+html[lang="fr"] .toolbar { gap: 5px; padding: 10px 10px; } html[lang="fr"] .grp { gap: 6px; padding: 6px 7px; } html[lang="fr"] .grp-h { letter-spacing: 0.03em; } html[lang="fr"] .seg button { padding: 7px 7px; }
+@media (max-width: 1600px) { .grp-h { font-size: 11px; letter-spacing: 0.02em; } .seg button { padding: 7px 6px; font-size: 13px; } .grp { gap: 5px; padding: 6px 6px; } .toolbar { gap: 5px; padding: 10px 10px; } html[lang="fr"] .grp-h { letter-spacing: 0; } html[lang="fr"] .seg button { padding: 7px 5px; } html[lang="fr"] .grp { gap: 5px; padding: 6px 5px; } html[lang="fr"] .toolbar { gap: 4px; } }
 .helpbtn { align-self: center; width: 42px; height: 42px; flex: none; border-radius: 50%; border: 2px solid var(--c-ui); background: transparent; color: var(--c-ui); font-family: var(--f-display); font-weight: 800; font-size: 19px; cursor: pointer; }
 .langseg { align-self: center; flex: none; --c: var(--c-ui); }
 .langseg button { padding: 8px 12px; font-weight: 800; letter-spacing: 0.04em; }
@@ -219,6 +222,8 @@ td .delta { display: block; font-size: 11px; }
     <div class="seg" id="segScale"><button data-v="enlarged" aria-pressed="true">Enlarged</button><button data-v="true" aria-pressed="false">True</button></div></div>
   <div class="grp"><span class="grp-h">Stars</span>
     <div class="seg" id="segStars"><button data-v="off" aria-pressed="false">Off</button><button data-v="on" aria-pressed="true">On</button><button data-v="names" aria-pressed="false">Names</button><button data-v="trails" aria-pressed="false">Trails</button></div></div>
+  <div class="grp"><span class="grp-h">Planets</span>
+    <div class="seg" id="segPlanets"><button data-v="off" aria-pressed="false">Off</button><button data-v="on" aria-pressed="true">On</button><button data-v="paths" aria-pressed="false">Paths</button></div></div>
   <div class="grp"><span class="grp-h">Solar filter</span>
     <div class="seg" id="segFilter"><button data-v="off" aria-pressed="true">Off</button><button data-v="on" aria-pressed="false">On</button></div></div>
   <div class="grp"><span class="grp-h">Labels</span>
@@ -253,6 +258,7 @@ td .delta { display: block; font-size: 11px; }
       <dt>View</dt><dd><i>Observer</i>: what you would see standing there. <i>Space</i>: the whole planet from outside.</dd>
       <dt>Scale</dt><dd><i>Enlarged</i> makes the Sun and Moon visible in Space view. <i>True</i> shows real sizes and distances.</dd>
       <dt>Stars</dt><dd>Off, on, with names, or <i>Trails</i>: the paths stars draw across the sky during playback.</dd>
+      <dt>Planets</dt><dd>Shows Mercury to Neptune at their real positions among the stars. On the flat model they sit on the firmament with the stars. <i>Paths</i> shows where each one goes among the stars over two months either side of the date, solid where it has been and dotted where it is going, with a dot on the 1st of each month: you can watch planets turn back.</dd>
       <dt>Solar filter</dt><dd>Removes the Sun's glare so you can see its disc, for example during an eclipse.</dd>
       <dt>Labels</dt><dd>Shows or hides the names on the views.</dd>
       <dt>km | mi (top right)</dt><dd>Shows distances, altitudes and speeds in kilometres or in miles (feet for low altitudes, mph for speeds).</dd>
@@ -301,7 +307,7 @@ td .delta { display: block; font-size: 11px; }
       <div class="row">
         <label for="follow" class="ctl-label" style="align-self:center">Follow</label>
         <select id="follow" aria-label="Keep the view on" style="flex:1">
-          <option value="off">Off</option><option value="sun">The GE Sun</option><option value="moon">The GE Moon</option><option value="fesun">The FE Sun</option><option value="femoon">The FE Moon</option><option value="polaris">Polaris</option><option value="cross">The Southern Cross</option>
+          <option value="off">Off</option><option value="sun">The GE Sun</option><option value="moon">The GE Moon</option><option value="fesun">The FE Sun</option><option value="femoon">The FE Moon</option><option value="venus">Venus</option><option value="mars">Mars</option><option value="jupiter">Jupiter</option><option value="saturn">Saturn</option><option value="polaris">Polaris</option><option value="cross">The Southern Cross</option>
         </select>
       </div>
       <p class="hint" id="faceNote"></p>
@@ -1781,6 +1787,24 @@ const FR = {
 "The FE Sun": "Le Soleil TP",
 "The FE Moon": "La Lune TP",
 "Polaris": "Polaire",
+"Mercury": "Mercure",
+"Venus": "Vénus",
+"Mars": "Mars",
+"Jupiter": "Jupiter",
+"Saturn": "Saturne",
+"Uranus": "Uranus",
+"Neptune": "Neptune",
+"Feb 2027": "févr. 2027",
+"Planets": "Planètes",
+"Paths": "Trajets",
+"1 Dec": "1er déc.",
+"1 Jan": "1er janv.",
+"1 Feb": "1er févr.",
+"1 Mar": "1er mars",
+"1 Apr": "1er avr.",
+"1 May": "1er mai",
+"Mars goes backwards (retrograde loop)": "Mars recule (boucle rétrograde)",
+"Mars in Leo, February 2027. The orange line is its path among the stars from late November to mid-May: solid where Mars has been, dotted where it is going. Mars normally drifts east, but from 12 January to 3 April 2027 it goes backwards, then turns again. On a globe orbiting the Sun this is simple: Earth, on a faster inner orbit, overtakes Mars, so Mars seems to slip back, like a slower car seen from a faster one. A flat Earth with planets fixed to a firmament has no explanation for these loops.": "Mars dans le Lion, février 2027. La ligne orange est son chemin parmi les étoiles de fin novembre à mi-mai : pleine là où Mars est passée, en pointillés là où elle va. Mars dérive normalement vers l'est, mais du 12 janvier au 3 avril 2027 elle recule, puis repart. Sur un globe qui tourne autour du Soleil, c'est simple : la Terre, sur une orbite intérieure plus rapide, dépasse Mars, qui semble alors reculer, comme une voiture plus lente vue depuis une voiture plus rapide. Une Terre plate dont les planètes sont fixées à un firmament n'explique pas ces boucles.",
 "The Southern Cross": "La Croix du Sud",
 "Observer view: drag to look around, scroll to zoom. From 2,000 km up, or in Space view, click any point to go there. Space view: drag to orbit.": "Vue observateur : glissez pour regarder autour, molette pour zoomer. À partir de 2 000 km d'altitude, ou en vue de l'espace, cliquez un point pour y aller. Vue de l'espace : glissez pour tourner autour.",
 "Saved places": "Lieux enregistrés",
@@ -1999,7 +2023,7 @@ const FR = {
 "Alexandria, Egypt": "Alexandrie, Égypte",
 "Union Glacier Camp, Antarctica": "Camp d'Union Glacier, Antarctique"
 };
-const FRH = {"title": "<span class=\"g\">Globe</span> <span class=\"vs\">vs</span> <span class=\"e\">Terre</span> <span class=\"f\">Plate</span>", "sources": "<b>Sources :</b> positions réelles du Soleil et de la Lune d'après <a href=\"https://github.com/cosinekitty/astronomy\">Astronomy Engine</a> de Don Cross (MIT). Étoiles du catalogue Hipparcos via <a href=\"https://github.com/ofrohn/d3-celestial\">d3-celestial</a> d'Olaf Frohn (BSD). Images de la Terre : NASA Blue Marble, Black Marble, données d'altitude et carte de la Lune de Lunar Reconnaissance Orbiter (domaine public). Côtes : Natural Earth (domaine public). Durées de vol : Flightradar24 (octobre 2026). Rendu 3D : three.js.", "support": "<b>Soutenir ce projet :</b> ce site est gratuit, sans publicité ni pistage. S'il vous est utile, vous pouvez <a href=\"https://ko-fi.com/nikbtd\" target=\"_blank\" rel=\"noopener\">le soutenir sur Ko-fi</a> et aider à financer la suite, par exemple une application pour téléphone.", "help0": "\n    <h2 id=\"helpTitle\">Globe vs Terre Plate : à quoi sert cette page</h2>\n    <p>Deux modèles de la Terre, côte à côte : le <b class=\"cg\">Globe (G)</b> et la <b class=\"cf\">Terre Plate (TP)</b> sur la carte de Gleason. Choisissez n'importe quel lieu et moment : chaque modèle affiche le ciel qu'il prédit (Soleil, Lune, étoiles et horizon). Le tableau sous les vues place chaque prédiction à côté du vrai ciel, pour voir quel modèle correspond. Une suggestion : allez dehors et comparez avec ce que vous observez.</p>\n    <h3>Comment chaque modèle est construit</h3>\n    <ul>\n      <li><b>Vrai ciel</b> : Astronomy Engine, des éphémérides qui collent aux observations des télescopes (à moins d'une minute d'arc près), y compris la courbure de la lumière par l'air.</li>\n      <li><b class=\"cg\">Globe</b> : simple géométrie des sphères, calculée directement dans cette page. Le Soleil est la seule lumière : le jour, la nuit, les phases de la Lune et les éclipses en découlent d'eux-mêmes.</li>\n      <li><b class=\"cf\">Terre Plate</b> : dans sa version la plus favorable. Il utilise le vrai point de la Terre situé sous le Soleil et sous la Lune, et les place tous deux à 4 828 km (3 000 miles) au-dessus de la carte de Gleason, chacun large de 51 km. La nuit suppose que le Soleil de la Terre Plate est un « projecteur » : il fait noir à plus d'environ 10 000 km du point situé sous le Soleil (réglable). Les étoiles sont sur un dôme (le « firmament ») haut de 10 000 km au-dessus du pôle Nord, qui redescend jusqu'au « mur de glace » en Antarctique. Vous pouvez changer ces chiffres dans <i>Réglages du modèle Terre Plate</i>.</li>\n    </ul>\n    <p>Abréviations dans les vues : <b class=\"cg\">G</b> signifie Globe et <b class=\"cf\">TP</b> Terre Plate. <i>Soleil TP</i> et <i>Lune TP</i> sont le Soleil et la Lune du modèle Terre Plate. Sur la vue plate, les cercles rouge et bleu marqués <i>Soleil G</i> et <i>Lune G</i> montrent où sont le vrai Soleil et la vraie Lune, comme le prédit le modèle Globe.</p>\n    <p> Horizon : l'air courbe légèrement la lumière autour de la Terre, si bien que le vrai horizon est environ 7 % plus loin que ne le donne la géométrie seule. Sur un disque plat, il n'y aurait pas d'horizon du tout, seulement de la brume.</p>\n    <p>Cette page est gratuite, sans publicité ni pistage. Pour aider la suite du projet, par exemple une application pour téléphone, vous pouvez <a href=\"https://ko-fi.com/nikbtd\" target=\"_blank\" rel=\"noopener\">la soutenir sur Ko-fi</a>.</p>\n    <p class=\"help-src\">Étoiles : les 520 plus brillantes (magnitude 4 et moins) du catalogue Hipparcos, avec les lignes de 18 constellations, via d3-celestial d'Olaf Frohn (BSD). Images de la Terre : NASA Blue Marble et Black Marble. Carte de la Lune : NASA Lunar Reconnaissance Orbiter.</p>\n  ", "help1": "\n    <h2>Options</h2>\n    <h3>Barre du haut</h3>\n    <dl>\n      <dt>Modèle</dt><dd>Les deux modèles côte à côte, ou un seul en pleine largeur.</dd>\n      <dt>Vue</dt><dd><i>Observateur</i> : ce que vous verriez sur place. <i>Espace</i> : la planète entière vue de l'extérieur.</dd>\n      <dt>Échelle</dt><dd><i>Agrandie</i> rend le Soleil et la Lune visibles en vue de l'espace. <i>Réelle</i> montre les vraies tailles et distances.</dd>\n      <dt>Étoiles</dt><dd>Non, oui, avec les noms, ou <i>Traînées</i> : le chemin que les étoiles tracent dans le ciel pendant la lecture.</dd>\n      <dt>Filtre solaire</dt><dd>Supprime l'éblouissement du Soleil pour voir son disque, par exemple pendant une éclipse.</dd>\n      <dt>Étiquettes</dt><dd>Affiche ou masque les noms sur les vues.</dd>\n      <dt>km | mi (en haut à droite)</dt><dd>Affiche les distances, altitudes et vitesses en kilomètres ou en miles (pieds pour les basses altitudes, mph pour les vitesses).</dd>\n      <dt>EN | FR (en haut à droite)</dt><dd>Passe toute la page de l'anglais au français, et inversement.</dd>\n    </dl>\n    <h3>Panneau de gauche</h3>\n    <dl>\n      <dt>Observateur</dt><dd>Choisissez un lieu, tapez des coordonnées ou réglez l'altitude, du sol jusqu'à l'espace. Les boutons <i>Face à</i> tournent la vue vers le Soleil, la Lune, l'étoile Polaire ou la Croix du Sud ; <i>Suivre</i> l'y maintient.</dd>\n      <dt>Lieux enregistrés</dt><dd>Gardez vos propres lieux dans ce navigateur.</dd>\n      <dt>Date et heure</dt><dd>N'importe quelle date, dans le fuseau horaire de votre choix (le vôtre par défaut), avec une lecture à plusieurs vitesses. <i>Événements réels</i> mène à des éclipses et observations célèbres.</dd>\n      <dt>Distance</dt><dd>La distance entre deux villes sur chaque modèle.</dd>\n      <dt>Vrais vols</dt><dd>De vrais vols avec leur durée réelle, et la vitesse qu'il faudrait sur chaque modèle.</dd>\n      <dt>Réglages du modèle Terre Plate</dt><dd>Essayez d'autres hauteurs et tailles pour le Soleil TP, la Lune TP et le firmament, et d'autres tailles pour le projecteur solaire.</dd>\n    </dl>\n    <p class=\"help-src\">Souris : glissez pour regarder autour (ou tourner autour de la planète en vue de l'espace), molette pour zoomer. En vue de l'espace, ou à partir de 2 000 km, cliquez un point de la planète pour y aller. Chaque section du panneau de gauche se replie quand on clique sur son titre.</p>\n  "};
+const FRH = {"title": "<span class=\"g\">Globe</span> <span class=\"vs\">vs</span> <span class=\"e\">Terre</span> <span class=\"f\">Plate</span>", "sources": "<b>Sources :</b> positions réelles du Soleil et de la Lune d'après <a href=\"https://github.com/cosinekitty/astronomy\">Astronomy Engine</a> de Don Cross (MIT). Étoiles du catalogue Hipparcos via <a href=\"https://github.com/ofrohn/d3-celestial\">d3-celestial</a> d'Olaf Frohn (BSD). Images de la Terre : NASA Blue Marble, Black Marble, données d'altitude et carte de la Lune de Lunar Reconnaissance Orbiter (domaine public). Côtes : Natural Earth (domaine public). Durées de vol : Flightradar24 (octobre 2026). Rendu 3D : three.js.", "support": "<b>Soutenir ce projet :</b> ce site est gratuit, sans publicité ni pistage. S'il vous est utile, vous pouvez <a href=\"https://ko-fi.com/nikbtd\" target=\"_blank\" rel=\"noopener\">le soutenir sur Ko-fi</a> et aider à financer la suite, par exemple une application pour téléphone.", "help0": "\n    <h2 id=\"helpTitle\">Globe vs Terre Plate : à quoi sert cette page</h2>\n    <p>Deux modèles de la Terre, côte à côte : le <b class=\"cg\">Globe (G)</b> et la <b class=\"cf\">Terre Plate (TP)</b> sur la carte de Gleason. Choisissez n'importe quel lieu et moment : chaque modèle affiche le ciel qu'il prédit (Soleil, Lune, étoiles et horizon). Le tableau sous les vues place chaque prédiction à côté du vrai ciel, pour voir quel modèle correspond. Une suggestion : allez dehors et comparez avec ce que vous observez.</p>\n    <h3>Comment chaque modèle est construit</h3>\n    <ul>\n      <li><b>Vrai ciel</b> : Astronomy Engine, des éphémérides qui collent aux observations des télescopes (à moins d'une minute d'arc près), y compris la courbure de la lumière par l'air.</li>\n      <li><b class=\"cg\">Globe</b> : simple géométrie des sphères, calculée directement dans cette page. Le Soleil est la seule lumière : le jour, la nuit, les phases de la Lune et les éclipses en découlent d'eux-mêmes.</li>\n      <li><b class=\"cf\">Terre Plate</b> : dans sa version la plus favorable. Il utilise le vrai point de la Terre situé sous le Soleil et sous la Lune, et les place tous deux à 4 828 km (3 000 miles) au-dessus de la carte de Gleason, chacun large de 51 km. La nuit suppose que le Soleil de la Terre Plate est un « projecteur » : il fait noir à plus d'environ 10 000 km du point situé sous le Soleil (réglable). Les étoiles sont sur un dôme (le « firmament ») haut de 10 000 km au-dessus du pôle Nord, qui redescend jusqu'au « mur de glace » en Antarctique. Vous pouvez changer ces chiffres dans <i>Réglages du modèle Terre Plate</i>.</li>\n    </ul>\n    <p>Abréviations dans les vues : <b class=\"cg\">G</b> signifie Globe et <b class=\"cf\">TP</b> Terre Plate. <i>Soleil TP</i> et <i>Lune TP</i> sont le Soleil et la Lune du modèle Terre Plate. Sur la vue plate, les cercles rouge et bleu marqués <i>Soleil G</i> et <i>Lune G</i> montrent où sont le vrai Soleil et la vraie Lune, comme le prédit le modèle Globe.</p>\n    <p> Horizon : l'air courbe légèrement la lumière autour de la Terre, si bien que le vrai horizon est environ 7 % plus loin que ne le donne la géométrie seule. Sur un disque plat, il n'y aurait pas d'horizon du tout, seulement de la brume.</p>\n    <p>Cette page est gratuite, sans publicité ni pistage. Pour aider la suite du projet, par exemple une application pour téléphone, vous pouvez <a href=\"https://ko-fi.com/nikbtd\" target=\"_blank\" rel=\"noopener\">la soutenir sur Ko-fi</a>.</p>\n    <p class=\"help-src\">Étoiles : les 520 plus brillantes (magnitude 4 et moins) du catalogue Hipparcos, avec les lignes de 18 constellations, via d3-celestial d'Olaf Frohn (BSD). Images de la Terre : NASA Blue Marble et Black Marble. Carte de la Lune : NASA Lunar Reconnaissance Orbiter.</p>\n  ", "help1": "\n    <h2>Options</h2>\n    <h3>Barre du haut</h3>\n    <dl>\n      <dt>Modèle</dt><dd>Les deux modèles côte à côte, ou un seul en pleine largeur.</dd>\n      <dt>Vue</dt><dd><i>Observateur</i> : ce que vous verriez sur place. <i>Espace</i> : la planète entière vue de l'extérieur.</dd>\n      <dt>Échelle</dt><dd><i>Agrandie</i> rend le Soleil et la Lune visibles en vue de l'espace. <i>Réelle</i> montre les vraies tailles et distances.</dd>\n      <dt>Étoiles</dt><dd>Non, oui, avec les noms, ou <i>Traînées</i> : le chemin que les étoiles tracent dans le ciel pendant la lecture.</dd>\n      <dt>Planètes</dt><dd>Affiche Mercure à Neptune à leur vraie position parmi les étoiles. Sur le modèle Terre Plate, elles sont sur le firmament avec les étoiles. <i>Trajets</i> montre leur chemin parmi les étoiles sur deux mois de part et d'autre de la date, en trait plein pour le passé et en pointillés pour l'avenir, avec un point le 1er de chaque mois : on y voit les planètes faire marche arrière.</dd>\n      <dt>Filtre solaire</dt><dd>Supprime l'éblouissement du Soleil pour voir son disque, par exemple pendant une éclipse.</dd>\n      <dt>Étiquettes</dt><dd>Affiche ou masque les noms sur les vues.</dd>\n      <dt>km | mi (en haut à droite)</dt><dd>Affiche les distances, altitudes et vitesses en kilomètres ou en miles (pieds pour les basses altitudes, mph pour les vitesses).</dd>\n      <dt>EN | FR (en haut à droite)</dt><dd>Passe toute la page de l'anglais au français, et inversement.</dd>\n    </dl>\n    <h3>Panneau de gauche</h3>\n    <dl>\n      <dt>Observateur</dt><dd>Choisissez un lieu, tapez des coordonnées ou réglez l'altitude, du sol jusqu'à l'espace. Les boutons <i>Face à</i> tournent la vue vers le Soleil, la Lune, l'étoile Polaire ou la Croix du Sud ; <i>Suivre</i> l'y maintient.</dd>\n      <dt>Lieux enregistrés</dt><dd>Gardez vos propres lieux dans ce navigateur.</dd>\n      <dt>Date et heure</dt><dd>N'importe quelle date, dans le fuseau horaire de votre choix (le vôtre par défaut), avec une lecture à plusieurs vitesses. <i>Événements réels</i> mène à des éclipses et observations célèbres.</dd>\n      <dt>Distance</dt><dd>La distance entre deux villes sur chaque modèle.</dd>\n      <dt>Vrais vols</dt><dd>De vrais vols avec leur durée réelle, et la vitesse qu'il faudrait sur chaque modèle.</dd>\n      <dt>Réglages du modèle Terre Plate</dt><dd>Essayez d'autres hauteurs et tailles pour le Soleil TP, la Lune TP et le firmament, et d'autres tailles pour le projecteur solaire.</dd>\n    </dl>\n    <p class=\"help-src\">Souris : glissez pour regarder autour (ou tourner autour de la planète en vue de l'espace), molette pour zoomer. En vue de l'espace, ou à partir de 2 000 km, cliquez un point de la planète pour y aller. Chaque section du panneau de gauche se replie quand on clique sur son titre.</p>\n  "};
 
 </script>
 <script>
@@ -2139,6 +2163,9 @@ const EVENTS = [
   ["moment", "2024-12-16T05:33:00Z", "Union Glacier Camp, Antarctica", -79.7667, -83.2667, "Dec 2024",
     "The Final Experiment: 24-hour Sun at Union Glacier, Antarctica", 3600,
     "Union Glacier, local midnight in December 2024. The real Sun is still up, low in the south. Playing at 1 hour per second: watch it circle the whole horizon while the flat model's Sun stays roughly north."],
+  ["moment", "2027-02-19T23:00:00Z", "Paris, France", 48.8566, 2.3522, "Feb 2027",
+    "Mars goes backwards (retrograde loop)", 0,
+    "Mars in Leo, February 2027. The orange line is its path among the stars from late November to mid-May: solid where Mars has been, dotted where it is going. Mars normally drifts east, but from 12 January to 3 April 2027 it goes backwards, then turns again. On a globe orbiting the Sun this is simple: Earth, on a faster inner orbit, overtakes Mars, so Mars seems to slip back, like a slower car seen from a faster one. A flat Earth with planets fixed to a firmament has no explanation for these loops.", 40, "mars", "on", "Mars"],
 ];
 const ECLIPSES = [
   // 29 Feb 1504 (Julian calendar): Columbus, stranded in Jamaica, used a predicted lunar eclipse to win over the Taíno.
@@ -2167,7 +2194,7 @@ const S = {
   date: new Date(), playing: false, speed: 600,
   view: "observer", scale: "enlarged", models: "both", labels: "on", filter: "off", stars: "on", follow: "off",
   lookAz: 180, lookAlt: 8, fov: 60,
-  flights: new Set(),
+  flights: new Set(), planetPath: null, planets: "on",
   distA: "Sydney, Australia", distB: "Santiago, Chile", drawDist: false, distShown: true,
 };
 
@@ -2486,7 +2513,7 @@ function makeStarLayer(V) {
   const mkLab = (text, color, k) => { const l = labelSprite(text, color); l.userData.isLabel = false; l.userData.isStarLabel = true; l.material.depthTest = true; l.userData.k = k; l.userData.base = [k * l.userData.aspect, k]; group.add(l); return l; };
   const names = STARS.n.map(x => mkLab(x[0], "#d6e4ff", 0.03)), cons = STARS.c.map(x => mkLab(x[0], "#8fb4ee", 0.028));
   cons.forEach(l => l.center.set(0.5, 0.5));
-  return { group, bins, lines, names, cons, n: -1 };
+  const L = { group, bins, lines, names, cons, n: -1 }; makePlanetLayer(L, pr); return L;
 }
 // Move every star, line and name to where toPos puts the direction (x, y, z) of date.
 function placeStars(L, toPos) {
@@ -2534,10 +2561,112 @@ function updateTrails(V, T, L, opacity) {
   T.line.geometry.setDrawRange(0, n); P.needsUpdate = C.needsUpdate = true; T.line.material.opacity = 0.75 * opacity;
 }
 function showStars(L, opacity) {
-  const on = S.stars !== "off" && opacity > 0.01;
-  L.group.visible = on; L.opacity = opacity; if (!on) return;
-  L.bins.forEach(b => b.pts.material.opacity = opacity); L.lines.material.opacity = 0.4 * opacity;
-  const nm = S.stars === "names" && opacity > 0.3; L.names.forEach(l => l.visible = nm); L.cons.forEach(l => l.visible = nm);
+  const stars = S.stars !== "off" && opacity > 0.01;
+  L.opacity = opacity; L.group.visible = (stars || S.planets === "on") && opacity > 0.01; if (!L.group.visible) return;
+  L.bins.forEach(b => { b.pts.material.opacity = opacity; b.pts.visible = stars; }); L.lines.material.opacity = 0.4 * opacity; L.lines.visible = stars;
+  const nm = stars && S.stars === "names" && opacity > 0.3; L.names.forEach(l => l.visible = nm); L.cons.forEach(l => l.visible = nm);
+}
+// ---------- planets: real positions from Astronomy Engine, drawn among the stars (on the flat model, on the firmament with them)
+const PLANETS = [["Mercury", "#e3d3bb"], ["Venus", "#fff4dc"], ["Mars", "#ff9466"], ["Jupiter", "#ffe3bd"], ["Saturn", "#f3d998"], ["Uranus", "#bff3ff"], ["Neptune", "#9db8ff"]];
+let planetCache = { t: NaN, list: [] };
+function planetsOfDate(date) {
+  if (+date === planetCache.t) return planetCache.list;
+  const t = A.MakeTime(date), rot = A.Rotation_EQJ_EQD(t);
+  const list = PLANETS.map(([name]) => {
+    const v = A.RotateVector(rot, A.GeoVector(A.Body[name], t, true)), r = Math.hypot(v.x, v.y, v.z);
+    return { dir: [v.x / r, v.y / r, v.z / r], mag: A.Illumination(A.Body[name], t).mag };
+  });
+  planetCache = { t: +date, list }; return list;
+}
+// A planet's track among the stars, one point a day (shows the backward loop of retrograde motion).
+function planetTrack(name, t0, days) {
+  const out = [];
+  for (let d = -days; d <= days; d++) {
+    const t = A.MakeTime(new Date(+t0 + d * 864e5)), v = A.RotateVector(A.Rotation_EQJ_EQD(t), A.GeoVector(A.Body[name], t, true)), r = Math.hypot(v.x, v.y, v.z);
+    out.push([v.x / r, v.y / r, v.z / r]);
+  }
+  return out;
+}
+function makePlanetLayer(L, pr) {
+  L.planets = PLANETS.map(([name, color]) => {
+    const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.Float32BufferAttribute([0, 0, 0], 3));
+    const pts = new THREE.Points(geo, new THREE.PointsMaterial({ size: 6 * pr, sizeAttenuation: false, map: starDot, color, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    pts.frustumCulled = false; L.group.add(pts);
+    const lab = labelSprite(name, color); lab.material.depthTest = true; lab.userData.k = 0.034; lab.userData.base = [0.034 * lab.userData.aspect, 0.034]; L.group.add(lab);
+    return { pts, lab, pr };
+  });
+  L.track = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xff9466, transparent: true, opacity: 0.75, depthWrite: false }));
+  L.track.frustumCulled = false; L.group.add(L.track);
+  L.trackDots = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ size: 4 * pr, sizeAttenuation: false, map: starDot, color: 0xff9466, transparent: true, depthWrite: false }));
+  L.trackDots.frustumCulled = false; L.group.add(L.trackDots); L.trackLabs = [];
+  L.trackFut = makeFuture(0xff9466, pr); L.group.add(L.trackFut);
+  L.paths = PLANETS.map(([, color]) => {
+    const line = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.55, depthWrite: false }));
+    const dots = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ size: 3.5 * pr, sizeAttenuation: false, map: starDot, color, transparent: true, depthWrite: false }));
+    const fut = makeFuture(color, pr);
+    line.frustumCulled = dots.frustumCulled = false; L.group.add(line, dots, fut); return { line, dots, fut };
+  });
+}
+// Past part of a path as a solid line, future part as a dotted line (one dot a day), split at the current date.
+function makeFuture(color, pr) {
+  const p = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ size: 1.5 * pr, sizeAttenuation: false, color, transparent: true, depthWrite: false }));
+  p.frustumCulled = false; return p;
+}
+function splitPath(line, fut, P, now) {
+  const k = clamp(now, 0, P.length - 1);
+  // Zoomed out, daily dots would run together: keep one every 2 or 3 days so the dotted line stays a dotted line.
+  const step = S.view === "space" || S.fov > 45 ? 3 : S.fov > 20 ? 2 : 1;
+  line.geometry.setFromPoints(P.slice(0, k + 1)); fut.geometry.setFromPoints(P.slice(k).filter((_, i) => i % step === 0));
+}
+// "Paths": where each planet goes among the stars over two months either side of the date (recomputed as the date moves on).
+const PATH_DAYS = 60;
+let pathCache = { t: NaN, list: [] };
+function planetPaths(date) {
+  if (Math.abs(date - pathCache.t) < 5 * 864e5) return pathCache.list;
+  const list = PLANETS.map(([name]) => {
+    const pts = planetTrack(name, date, PATH_DAYS), marks = [];
+    pts.forEach((d, k) => { if (new Date(+date + (k - PATH_DAYS) * 864e5).getUTCDate() === 1) marks.push(k); });
+    return { pts, marks };
+  });
+  pathCache = { t: +date, list }; return list;
+}
+function placePlanets(L, toPos) {
+  const on = L.group.visible && S.planets !== "off", list = planetsOfDate(S.date);
+  L.planets.forEach((p, i) => {
+    const { dir, mag } = list[i], pos = toPos(...dir);
+    p.pts.geometry.attributes.position.setXYZ(0, pos.x, pos.y, pos.z); p.pts.geometry.attributes.position.needsUpdate = true;
+    p.pts.material.size = clamp(7 - 1.1 * mag, 2.5, 11) * p.pr; p.pts.material.opacity = L.opacity;
+    p.lab.position.copy(pos); p.pts.visible = p.lab.visible = on;
+  });
+  // The event's dated path belongs to that moment and place: it goes once the date or the place moves on.
+  if (S.planetPath && (Math.abs(S.date - S.planetPath.t0) > 120 * 864e5 || S.lat !== S.planetPath.lat || S.lon !== S.planetPath.lon)) S.planetPath = null;
+  const tr = S.planetPath;
+  L.track.visible = L.trackDots.visible = L.trackFut.visible = on && !!tr;
+  if (tr && !tr.pts) { // a point a day, a dot and a date on the 1st of each month so the direction of travel reads at a glance
+    tr.pts = planetTrack(tr.body, tr.t0, tr.days); tr.marks = [];
+    tr.pts.forEach((d, k) => { const day = new Date(+tr.t0 + (k - tr.days) * 864e5); if (day.getUTCDate() === 1) tr.marks.push([k, "1 " + day.toLocaleString("en", { month: "short", timeZone: "UTC" })]); });
+  }
+  if (tr && tr !== L.trackOf) {
+    L.trackLabs.forEach(l => L.group.remove(l));
+    L.trackLabs = tr.marks.map(([, t]) => { const l = labelSprite(t, "#ffb08a"); l.material.depthTest = true; l.userData.k = 0.024; l.userData.base = [0.024 * l.userData.aspect, 0.024]; l.center.set(-0.2, 1.2); L.group.add(l); return l; });
+    L.trackOf = tr;
+  }
+  if (!tr) L.trackLabs.forEach(l => l.visible = false);
+  const showPaths = on && S.planets === "paths";
+  L.paths.forEach(p => p.line.visible = p.dots.visible = p.fut.visible = showPaths);
+  if (showPaths) planetPaths(S.date).forEach(({ pts, marks }, i) => {
+    if (tr && PLANETS[i][0] === tr.body) { L.paths[i].line.visible = L.paths[i].dots.visible = L.paths[i].fut.visible = false; return; } // the event draws its own, dated
+    const P = pts.map(d => toPos(...d)), p = L.paths[i];
+    splitPath(p.line, p.fut, P, Math.round((S.date - pathCache.t) / 864e5) + PATH_DAYS); p.dots.geometry.setFromPoints(marks.map(k => P[k]));
+    p.line.material.opacity = 0.7 * L.opacity; p.dots.material.opacity = p.fut.material.opacity = L.opacity;
+  });
+  if (tr) {
+    const P = tr.pts.map(d => toPos(...d));
+    splitPath(L.track, L.trackFut, P, Math.round((S.date - tr.t0) / 864e5) + tr.days);
+    L.track.material.opacity = 0.75 * L.opacity; L.trackFut.material.opacity = 0.9 * L.opacity;
+    L.trackDots.geometry.setFromPoints(tr.marks.map(([k]) => P[k]));
+    L.trackLabs.forEach((l, i) => { l.position.copy(P[tr.marks[i][0]]); l.visible = on; });
+  }
 }
 // Globe: equatorial (x, y, z) of date maps to world (x, z, -y), as eqVec does. Flat: overhead point at GAST 0, the group turns with GAST.
 const globeStarPos = (x, y, z) => new V3(x, z, -y).multiplyScalar(STAR_R);
@@ -2890,7 +3019,7 @@ function updateGlobe() {
   const camAlt = G.cam.position.length() - R_E;
   G.atmo.visible = camAlt > 150; G.atmo.material.uniforms.uK.value = 0.25 + 0.75 * smooth(400, 6000, camAlt);
   surfaceRelief(G, G.earth);
-  placeStars(G.stars, globeStarPos); G.stars.group.position.copy(G.cam.position); G.stars.group.updateMatrixWorld();
+  placeStars(G.stars, globeStarPos); placePlanets(G.stars, globeStarPos); G.stars.group.position.copy(G.cam.position); G.stars.group.updateMatrixWorld();
   updateTrails(G, G.trails, G.stars, G.stars.group.visible ? G.stars.opacity : 0);
 }
 
@@ -2944,7 +3073,7 @@ function updateFlat() {
     place(F.realSun, F.realSunLabel, A.Body.Sun); place(F.realMoon, F.realMoonLabel, A.Body.Moon);
     F.cam = F.obsCam; F.look = { f: fr, pos };
   } else { F.controls.update(); F.cam = F.spaceCam; F.look = null; showStars(F.stars, 1); }
-  placeStars(F.stars, flatStarPos); F.stars.group.rotation.y = -SUN.gast * 15 * D; F.stars.group.updateMatrixWorld();
+  placeStars(F.stars, flatStarPos); placePlanets(F.stars, flatStarPos); F.stars.group.rotation.y = -SUN.gast * 15 * D; F.stars.group.updateMatrixWorld();
   updateTrails(F, F.trails, F.stars, F.stars.group.visible ? F.stars.opacity : 0);
   F.sunLabel.visible = F.moonLabel.visible = true;
   F.sunPath.visible = F.moonPath.visible = F.dome.visible = !obsMode;
@@ -3184,6 +3313,7 @@ function initUI() {
   $("segLabels").addEventListener("click", e => { const v = e.target.dataset.v; if (!v) return; setSeg("segLabels", "labels", v); });
   initFESettings();
   $("segStars").addEventListener("click", e => { const v = e.target.dataset.v; if (!v) return; setSeg("segStars", "stars", v); });
+  $("segPlanets").addEventListener("click", e => { const v = e.target.dataset.v; if (!v) return; setSeg("segPlanets", "planets", v); });
   $("facePolaris").addEventListener("click", () => setFollow("off") || faceStar(() => L("Polaris", "L'étoile Polaire"), STARS.n.find(x => x[0] === "Polaris")));
   $("faceCross").addEventListener("click", () => setFollow("off") || faceStar(() => L("The Southern Cross", "La Croix du Sud"), STARS.c.find(x => x[0] === "Southern Cross")));
   $("segFilter").addEventListener("click", e => { const v = e.target.dataset.v; if (!v) return; setSeg("segFilter", "filter", v); });
@@ -3232,6 +3362,8 @@ function starHorizon([, raDeg, dec]) {
 const FOLLOW = {
   sun: () => realSky(A.Body.Sun, S.date, S.lat, S.lon, S.alt), moon: () => realSky(A.Body.Moon, S.date, S.lat, S.lon, S.alt),
   fesun: () => flatSky(SUN, S.lat, S.lon, S.alt), femoon: () => flatSky(MOON, S.lat, S.lon, S.alt), // where the flat model puts them
+  venus: () => realSky(A.Body.Venus, S.date, S.lat, S.lon, S.alt), mars: () => realSky(A.Body.Mars, S.date, S.lat, S.lon, S.alt),
+  jupiter: () => realSky(A.Body.Jupiter, S.date, S.lat, S.lon, S.alt), saturn: () => realSky(A.Body.Saturn, S.date, S.lat, S.lon, S.alt),
   polaris: () => { const { h } = starHorizon(STARS.n.find(x => x[0] === "Polaris")); return { alt: h.altitude, az: h.azimuth }; },
   cross: () => { const { h } = starHorizon(STARS.c.find(x => x[0] === "Southern Cross")); return { alt: h.altitude, az: h.azimuth }; },
 };
@@ -3283,8 +3415,10 @@ function initFESettings() {
   $("feReset").addEventListener("click", () => { Object.assign(FEP, FE_DEFAULTS); syncFE(); });
   syncFE();
 }
-function jumpEvent([, when, place, lat, lon, , , playSpeed, info, lookAlt, follow, stars]) {
+function jumpEvent([, when, place, lat, lon, , , playSpeed, info, lookAlt, follow, stars, track]) {
   S.lat = lat; S.lon = lon; S.alt = ALT_MIN; S.date = new Date(when); S.fov = 60;
+  S.planetPath = track ? { body: track, t0: new Date(when), days: 85, lat, lon } : null;
+  if (track) S.fov = 30; // close enough to see the loop
   S.playing = false; setPlayText();
   face(A.Body.Sun, lookAlt || 8); setFollow(follow || (playSpeed ? "sun" : "off"));
   if (stars) setSeg("segStars", "stars", stars);
@@ -3294,7 +3428,7 @@ function jumpEvent([, when, place, lat, lon, , , playSpeed, info, lookAlt, follo
   if (playSpeed) { S.speed = playSpeed; $("speed").value = String(playSpeed); S.playing = true; setPlayText(); }
 }
 function jumpEclipse([kind, start, place, lat, lon]) {
-  S.playing = false; setPlayText(); setFollow("off");
+  S.playing = false; setPlayText(); setFollow("off"); S.planetPath = null;
   S.lat = lat; S.lon = lon; S.alt = ALT_MIN;
   const t0 = A.MakeTime(new Date(start + "T00:00:00Z"));
   if (kind === "solar") {
