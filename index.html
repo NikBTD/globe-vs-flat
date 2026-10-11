@@ -346,7 +346,7 @@ td .delta { display: block; font-size: 11px; }
         <span class="k"><span class="swatch" style="background:var(--flat)"></span>Flat map (straight line)</span><span class="v" id="dFlat"></span>
         <span class="k">Flat ÷ globe</span><span class="v" id="dRatio"></span>
       </div>
-      <label class="row" style="font-size:12.5px;cursor:pointer"><input type="checkbox" id="drawDist"> Draw on both models</label>
+      <div class="row" style="justify-content:space-between;gap:8px"><label class="row" style="font-size:12.5px;cursor:pointer"><input type="checkbox" id="drawDist"> Draw on both models</label><button class="btn" id="eraseDist">Erase</button></div>
     </section>
 
     <section>
@@ -1773,6 +1773,7 @@ const FR = {
 "Face Polaris": "Face à l'étoile Polaire",
 "Face the Southern Cross": "Face à la Croix du Sud",
 "Follow": "Suivre",
+"Erase": "Effacer",
 "The Sun": "Le Soleil",
 "The Moon": "La Lune",
 "The GE Sun": "Le Soleil G",
@@ -2167,7 +2168,7 @@ const S = {
   view: "observer", scale: "enlarged", models: "both", labels: "on", filter: "off", stars: "on", follow: "off",
   lookAz: 180, lookAlt: 8, fov: 60,
   flights: new Set(),
-  distA: "Sydney, Australia", distB: "Santiago, Chile", drawDist: false,
+  distA: "Sydney, Australia", distB: "Santiago, Chile", drawDist: false, distShown: true,
 };
 
 // ---------- math helpers
@@ -2768,7 +2769,7 @@ function rebuildRoutes() {
   const [la1, lo1] = placeByName(S.distA), [la2, lo2] = placeByName(S.distB);
   // Each model always shows its own shortest route (blue great circle on the globe, orange straight line on the flat map);
   // the box adds the other model's route to each view.
-  if (la1 !== la2 || lo1 !== lo2) addDistance(la1, lo1, la2, lo2, S.drawDist);
+  if (S.distShown && (la1 !== la2 || lo1 !== lo2)) addDistance(la1, lo1, la2, lo2, S.drawDist);
   const g = gcDist(la1, lo1, la2, lo2), f = flatDist(la1, lo1, la2, lo2);
   $("dGlobe").textContent = fmtKm(g); $("dFlat").textContent = fmtKm(f);
   // Selected routes: distance on each model, real time in the air, and the average speed that makes.
@@ -3206,9 +3207,10 @@ function initUI() {
     if (v[0] === "e") jumpEclipse(ECLIPSES[+v.slice(1)]); else jumpEvent(EVENTS[+v.slice(1)]);
   });
 
-  $("distA").addEventListener("change", e => { S.distA = e.target.value; rebuildRoutes(); });
-  $("distB").addEventListener("change", e => { S.distB = e.target.value; rebuildRoutes(); });
-  $("drawDist").addEventListener("change", e => { S.drawDist = e.target.checked; rebuildRoutes(); });
+  $("distA").addEventListener("change", e => { S.distA = e.target.value; S.distShown = true; rebuildRoutes(); });
+  $("distB").addEventListener("change", e => { S.distB = e.target.value; S.distShown = true; rebuildRoutes(); });
+  $("eraseDist").addEventListener("click", () => { S.distShown = false; rebuildRoutes(); }); // picking a city or ticking the box draws the lines again
+  $("drawDist").addEventListener("change", e => { S.drawDist = e.target.checked; S.distShown = true; rebuildRoutes(); });
 
   for (const V of [G, F]) bindPointer(V);
   initSaved();
