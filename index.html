@@ -2745,20 +2745,30 @@ function placeByName(n) {
   if (n === "Observer") return [S.lat, S.lon];
   const p = CITIES.find(p => p[0] === n); return p ? [p[1], p[2]] : [0, 0];
 }
-function addRoute(la1, lo1, la2, lo2, color, flatStraight) {
+function addRoute(la1, lo1, la2, lo2, color) {
   const pts = gcPoints(la1, lo1, la2, lo2, 200);
   G.lines.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts.map(([a, b]) => geoVec(a, b, R_E + 12))), lineMat(color)));
   F.lines.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts.map(([a, b]) => { const [x, z] = flatXZ(a, b); return new V3(x, 6, z); })), lineMat(color)));
-  if (flatStraight) {
-    const [x1, z1] = flatXZ(la1, lo1), [x2, z2] = flatXZ(la2, lo2);
-    F.lines.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new V3(x1, 8, z1), new V3(x2, 8, z2)]), lineMat(0xf4a85c)));
+}
+function addDistance(la1, lo1, la2, lo2, both) {
+  const BLUE = 0x38e1ff, ORANGE = 0xffb547, n = 200;
+  const gc = gcPoints(la1, lo1, la2, lo2, n), [x1, z1] = flatXZ(la1, lo1), [x2, z2] = flatXZ(la2, lo2), seg = [];
+  for (let i = 0; i <= n; i++) seg.push([x1 + (x2 - x1) * i / n, z1 + (z2 - z1) * i / n]);
+  const line = (group, pts, color) => group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat(color)));
+  line(G.lines, gc.map(([a, b]) => geoVec(a, b, R_E + 12)), BLUE);
+  line(F.lines, seg.map(([x, z]) => new V3(x, 8, z)), ORANGE);
+  if (both) {
+    line(F.lines, gc.map(([a, b]) => { const [x, z] = flatXZ(a, b); return new V3(x, 6, z); }), BLUE); // the globe's route, drawn on the flat map (it bends)
+    line(G.lines, seg.map(([x, z]) => { const [a, b] = flatInv(x, z); return geoVec(a, b, R_E + 14); }), ORANGE); // the flat map's straight line, carried onto the globe
   }
 }
 function rebuildRoutes() {
   [G.lines, F.lines].forEach(g => { while (g.children.length) { const c = g.children.pop(); c.geometry.dispose(); } });
   for (const [a, b, , col] of FLIGHTS) if (S.flights.has(a + "-" + b)) addRoute(...AIRPORTS[a], ...AIRPORTS[b], col, false);
   const [la1, lo1] = placeByName(S.distA), [la2, lo2] = placeByName(S.distB);
-  if (S.drawDist) addRoute(la1, lo1, la2, lo2, 0x5cc8ff, true);
+  // Each model always shows its own shortest route (blue great circle on the globe, orange straight line on the flat map);
+  // the box adds the other model's route to each view.
+  if (la1 !== la2 || lo1 !== lo2) addDistance(la1, lo1, la2, lo2, S.drawDist);
   const g = gcDist(la1, lo1, la2, lo2), f = flatDist(la1, lo1, la2, lo2);
   $("dGlobe").textContent = fmtKm(g); $("dFlat").textContent = fmtKm(f);
   // Selected routes: distance on each model, real time in the air, and the average speed that makes.
