@@ -2311,6 +2311,27 @@ const S = {
   flights: new Set(), planetPath: null, planets: "on",
   distA: "Sydney, Australia", distB: "Santiago, Chile", drawDist: false, distShown: false,
 };
+// Starting place: guessed from the browser's time zone only (nothing is sent anywhere), so most visitors start near home.
+// Time zone -> a place in the list: usually the country's capital; big countries use a place in the same zone. Unknown zones keep Paris.
+const TZ_PLACE = {
+  "Europe/Zurich": "Bern, Switzerland", "Europe/Kiev": "Kyiv, Ukraine", "Europe/Istanbul": "Ankara, Turkey",
+  "America/New_York": "New York, USA", "America/Detroit": "Michigan (USA) – Lansing", "America/Chicago": "Illinois (USA) – Springfield",
+  "America/Denver": "Colorado (USA) – Denver", "America/Boise": "Idaho (USA) – Boise", "America/Phoenix": "Arizona (USA) – Phoenix",
+  "America/Los_Angeles": "California (USA) – Sacramento", "America/Anchorage": "Alaska (USA) – Juneau", "America/Juneau": "Alaska (USA) – Juneau",
+  "Pacific/Honolulu": "Hawaii (USA) – Honolulu", "America/Indiana/Indianapolis": "Indiana (USA) – Indianapolis", "America/Kentucky/Louisville": "Kentucky (USA) – Frankfort",
+  "America/Toronto": "Ottawa, Canada", "America/Mexico_City": "Mexico City, Mexico", "America/Sao_Paulo": "Brasília, Brazil",
+  "America/Argentina/Buenos_Aires": "Buenos Aires, Argentina", "America/Guayaquil": "Quito, Ecuador",
+  "Asia/Shanghai": "Beijing, China", "Asia/Ho_Chi_Minh": "Hanoi, Vietnam", "Asia/Saigon": "Hanoi, Vietnam", "Asia/Kolkata": "New Delhi, India", "Asia/Calcutta": "New Delhi, India",
+  "Asia/Karachi": "Islamabad, Pakistan", "Asia/Dubai": "Abu Dhabi, UAE", "Africa/Lagos": "Abuja, Nigeria", "Africa/Johannesburg": "Pretoria, South Africa",
+  "Africa/Casablanca": "Rabat, Morocco", "Australia/Sydney": "Canberra, Australia", "Australia/Melbourne": "Canberra, Australia", "Australia/Perth": "Perth, Australia",
+  "Pacific/Auckland": "Wellington, New Zealand",
+};
+(() => {
+  let tz = ""; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {}
+  const city = tz.split("/").pop().replace(/_/g, " ");
+  const p = CITIES.find(c => c[0] === TZ_PLACE[tz]) || (city && CITIES.find(c => c[0].split(",")[0] === city));
+  if (p) { S.lat = p[1]; S.lon = p[2]; }
+})();
 
 // ---------- math helpers
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
