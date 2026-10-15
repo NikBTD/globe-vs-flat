@@ -329,6 +329,7 @@ td .delta { display: block; font-size: 11px; }
         <div class="field"><label for="lat">Latitude °</label><input id="lat" type="number" step="0.0001" min="-89.999" max="89.999"></div>
         <div class="field"><label for="lon">Longitude °</label><input id="lon" type="number" step="0.0001" min="-180" max="180"></div>
       </div>
+      <label class="row" style="font-size:12.5px;cursor:pointer"><input type="checkbox" id="showPin" checked> Show the location pin in Space view</label>
       <div class="field">
         <label for="alt">Altitude <span class="readout" id="altOut"></span></label>
         <input id="alt" type="range" min="0" max="1000" step="1">
@@ -1824,6 +1825,7 @@ const FR = {
 "Face the Southern Cross": "Face à la Croix du Sud",
 "Follow": "Suivre",
 "Erase": "Effacer",
+"Show the location pin in Space view": "Afficher l'épingle du lieu en vue de l'espace",
 "The Sun": "Le Soleil",
 "The Moon": "La Lune",
 "The GE Sun": "Le Soleil G",
@@ -2967,6 +2969,10 @@ function makeView(canvas) {
   const v = { canvas, renderer, scene, obsCam, spaceCam, controls, sky, w: 1, h: 1 };
   new ResizeObserver(() => {
     const r = canvas.getBoundingClientRect(); if (!r.width || !r.height) return;
+    // Keep each drawing surface under ~3 million pixels: on a big, high-density screen (above all in full screen) the full
+    // pixel count overloads the graphics card, so the picture gets very slightly softer instead.
+    const pr = Math.min(2, window.devicePixelRatio || 1, Math.sqrt(3e6 / (r.width * r.height)));
+    if (renderer.getPixelRatio() !== pr) renderer.setPixelRatio(pr);
     v.w = r.width; v.h = r.height; renderer.setSize(r.width, r.height, false);
     obsCam.aspect = spaceCam.aspect = r.width / r.height; spaceCam.fov = capFov(45, spaceCam.aspect); obsCam.updateProjectionMatrix(); spaceCam.updateProjectionMatrix();
   }).observe(canvas);
@@ -3182,7 +3188,7 @@ function updateGlobe() {
   const sep = Math.acos(clamp(moonDir.dot(sunDir.clone().negate()), -1, 1)) / D;
   G.moon.material.uniforms.uTint.value = 1 - smooth(0.55, 0.85, sep);
   G.obsMark.position.copy(geoVec(S.lat, S.lon, R_E + 15));
-  G.obsMark.visible = !obsMode;
+  G.obsMark.visible = !obsMode && $("showPin").checked;
   // Labels ignore depth, so in Observer view show a name only while its body is above the visible horizon.
   const aboveHorizon = sp => globeSky(sp, S.lat, S.lon, S.alt).alt > -horizonDip(S.alt) - 0.5;
   G.sunLabel.visible = !obsMode || aboveHorizon(SUN); G.moonLabel.visible = !obsMode || aboveHorizon(MOON);
@@ -3247,7 +3253,7 @@ function updateFlat() {
   if (Math.abs(rS - lastSunR) > 2 || F.sunPath.userData.h !== FEP.sunH) { setCircle(F.sunPath, rS, FEP.sunH); lastSunR = rS; F.sunPath.userData.h = FEP.sunH; }
   if (Math.abs(rM - lastMoonR) > 2 || F.moonPath.userData.h !== FEP.moonH) { setCircle(F.moonPath, rM, FEP.moonH); lastMoonR = rM; F.moonPath.userData.h = FEP.moonH; }
   const fr = flatFrame(S.lat, S.lon);
-  F.obsMark.position.set(fr.pos.x, 20, fr.pos.z); F.obsMark.visible = !obsMode;
+  F.obsMark.position.set(fr.pos.x, 20, fr.pos.z); F.obsMark.visible = !obsMode && $("showPin").checked;
   F.sky.visible = obsMode; F.controls.enabled = !obsMode;
   F.realSun.visible = F.realMoon.visible = F.realSunLabel.visible = F.realMoonLabel.visible = obsMode;
   if (obsMode) {
