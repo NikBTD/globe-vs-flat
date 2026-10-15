@@ -180,6 +180,19 @@ input[type="range"] { width: 100%; accent-color: var(--globe); }
 .compass { position: absolute; left: 0; right: 0; bottom: 30px; height: 18px; pointer-events: none; font-family: var(--f-data); font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.75); text-shadow: 0 1px 2px #000; }
 .compass span { position: absolute; transform: translateX(-50%); }
 .views[data-show="globe"] #viewFlat, .views[data-show="flat"] #viewGlobe { display: none; }
+/* Full screen ("beautiful views"): the views fill the screen with nothing on top but a faint exit button; drag, scroll and zoom still work. */
+.views { position: relative; }
+.fs-btn { position: absolute; top: 10px; right: 10px; z-index: 5; display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.18); background: rgba(10, 14, 26, 0.45); color: rgba(255, 255, 255, 0.75); cursor: pointer; opacity: 0.45; transition: opacity 0.15s; }
+.fs-btn:hover, .fs-btn:focus-visible { opacity: 1; }
+.fs-btn svg { width: 16px; height: 16px; }
+.views.fs { position: fixed; inset: 0; z-index: 100; gap: 0; background: #000; grid-template-rows: 100%; }
+.views.fs .view { height: 100%; border: 0; border-radius: 0; box-shadow: none; }
+.views.fs[data-show="both"] .view + .view { border-left: 1px solid rgba(255, 255, 255, 0.08); }
+.views.fs .tag, .views.fs .note, .views.fs .flightbox, .views.fs .compass, .views.fs .hud { display: none; }
+.views.fs .fs-btn { opacity: 0.2; }
+.views.fs .fs-btn:hover, .views.fs .fs-btn:focus-visible { opacity: 1; }
+body.fs-on { overflow: hidden; }
 
 .compare { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
 .compare header { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; padding: 12px 14px 4px; }
@@ -421,6 +434,7 @@ td .delta { display: block; font-size: 11px; }
         <div class="compass" id="compassFlat"></div>
         <div class="hud" id="hudFlat"></div>
       </div>
+      <button class="fs-btn" id="fsBtn"></button>
     </div>
 
     <section class="compare">
@@ -2046,7 +2060,7 @@ const FR = {
 "The South Pole in June: the real Sun stays about 23° below the horizon all day, so it is night for months, and the stars circle straight overhead (trails switched on). The flat Sun would still hang 10° to 20° above the horizon here, so a flat Earth has no way to give the South Pole months of darkness.": "Le pôle Sud en juin : le vrai Soleil reste environ 23° sous l'horizon toute la journée. C'est la nuit pendant des mois, et les étoiles tournent juste au-dessus de la tête (traînées activées). Le Soleil TP resterait ici 10° à 20° au-dessus de l'horizon : une Terre Plate ne peut pas donner des mois d'obscurité au pôle Sud.",
 "June solstice, 240 BC, local noon at Syene. The Sun is almost straight overhead (89.6° up): a well shows no shadow. Eratosthenes compared this with Alexandria, about 840 km north, at the same moment (part 2).": "Solstice de juin, 240 av. J.-C., midi local à Syène. Le Soleil est presque au zénith (89,6°) : un puits ne montre aucune ombre. Ératosthène a comparé avec Alexandrie, à environ 840 km au nord, au même moment (partie 2).",
 "Same solstice noon at Alexandria. A stick casts a shadow: the Sun stands 7.5° from overhead (Eratosthenes measured about 7.2°, 1/50 of a circle). 7.5° for 840 km means a full circle of about 40,000 km: Earth's real size. A flat Earth needs a Sun about 6,600 km up to fit these two cities, but add a third city and no single height fits all three (try the Flat model settings and the table).": "Même midi de solstice à Alexandrie. Un bâton projette une ombre : le Soleil est à 7,5° du zénith (Ératosthène a mesuré environ 7,2°, soit 1/50 de cercle). 7,5° pour 840 km donnent un tour complet d'environ 40 000 km : la vraie taille de la Terre. Une Terre Plate a besoin d'un Soleil à environ 6 600 km pour ces deux villes, mais dès qu'on ajoute une troisième ville, aucune hauteur ne convient aux trois à la fois (essayez les réglages du modèle Terre Plate et le tableau).",
-"In December 2024, pastor Will Duffy flew four flat-earthers and four globe supporters to Union Glacier, Antarctica, for \"The Final Experiment\". Both sides agreed on one test: flat Earth maps say the Sun must set here, so a Sun that stays up for 24 hours disproves them. They filmed it live for days, and every flat-earther there admitted the 24-hour Sun is real. This is local midnight: the real Sun is still up, low in the south. Playing at 1 hour per second: watch it circle the whole horizon while the flat model's Sun stays roughly north.": "En décembre 2024, le pasteur Will Duffy a emmené quatre platistes et quatre défenseurs du globe à Union Glacier, en Antarctique, pour « The Final Experiment » (l'expérience finale). Les deux camps s'étaient mis d'accord sur un test : selon les cartes de la Terre Plate, le Soleil doit se coucher ici, donc un Soleil qui reste levé 24 heures les réfute. Ils l'ont filmé en direct pendant plusieurs jours, et tous les platistes présents ont reconnu que le Soleil de 24 heures est réel. Ici, il est minuit : le vrai Soleil est encore levé, bas vers le sud. Lecture à 1 heure par seconde : regardez-le faire le tour complet de l'horizon, alors que le Soleil du modèle Terre Plate reste à peu près au nord.",
+"In December 2024, pastor Will Duffy flew four flat-earthers and four globe supporters to Union Glacier, Antarctica, for \"The Final Experiment\". Both sides agreed on one test: on flat Earth maps the Sun circles too far away to light Antarctica, so they predict night here, and a Sun that stays up for 24 hours disproves them. They filmed it live for days, and every flat-earther there admitted the 24-hour Sun is real. This is local midnight: the real Sun is still up, low in the south. Playing at 1 hour per second: watch it circle the whole horizon while the flat model's Sun stays roughly north.": "En décembre 2024, le pasteur Will Duffy a emmené quatre platistes et quatre défenseurs du globe à Union Glacier, en Antarctique, pour « The Final Experiment » (l'expérience finale). Les deux camps s'étaient mis d'accord sur un test : sur les cartes de la Terre Plate, le Soleil tourne trop loin pour éclairer l'Antarctique, elles y prédisent donc la nuit, et un Soleil qui reste levé 24 heures les réfute. Ils l'ont filmé en direct pendant plusieurs jours, et tous les platistes présents ont reconnu que le Soleil de 24 heures est réel. Ici, il est minuit : le vrai Soleil est encore levé, bas vers le sud. Lecture à 1 heure par seconde : regardez-le faire le tour complet de l'horizon, alors que le Soleil du modèle Terre Plate reste à peu près au nord.",
 "North Cape, Norway": "Cap Nord, Norvège",
 "South Pole (Amundsen-Scott station)": "Pôle Sud (base Amundsen-Scott)",
 "Syene (Aswan), Egypt": "Syène (Assouan), Égypte",
@@ -2281,7 +2295,7 @@ const EVENTS = [
     "Same solstice noon at Alexandria. A stick casts a shadow: the Sun stands 7.5° from overhead (Eratosthenes measured about 7.2°, 1/50 of a circle). 7.5° for 840 km means a full circle of about 40,000 km: Earth's real size. A flat Earth needs a Sun about 6,600 km up to fit these two cities, but add a third city and no single height fits all three (try the Flat model settings and the table).", 82],
   ["moment", "2024-12-16T05:33:00Z", "Union Glacier Camp, Antarctica", -79.7667, -83.2667, "Dec 2024",
     "The Final Experiment: 24-hour Sun at Union Glacier, Antarctica", 3600,
-    "In December 2024, pastor Will Duffy flew four flat-earthers and four globe supporters to Union Glacier, Antarctica, for \"The Final Experiment\". Both sides agreed on one test: flat Earth maps say the Sun must set here, so a Sun that stays up for 24 hours disproves them. They filmed it live for days, and every flat-earther there admitted the 24-hour Sun is real. This is local midnight: the real Sun is still up, low in the south. Playing at 1 hour per second: watch it circle the whole horizon while the flat model's Sun stays roughly north."],
+    "In December 2024, pastor Will Duffy flew four flat-earthers and four globe supporters to Union Glacier, Antarctica, for \"The Final Experiment\". Both sides agreed on one test: on flat Earth maps the Sun circles too far away to light Antarctica, so they predict night here, and a Sun that stays up for 24 hours disproves them. They filmed it live for days, and every flat-earther there admitted the 24-hour Sun is real. This is local midnight: the real Sun is still up, low in the south. Playing at 1 hour per second: watch it circle the whole horizon while the flat model's Sun stays roughly north."],
   // Scripted: Play stops at each sunset, then the observer climbs (ground, airliner, ISS height) and the Sun comes back.
   ["moment", "2026-09-22T18:04:00Z", "La Palue beach, Crozon, France", 48.2058, -4.5539, "Sep 2026",
     "Sunset at La Palue beach, France (three sunsets)", 60,
@@ -2695,8 +2709,13 @@ function updateTrails(V, T, L, opacity) {
       w.set(a.getX(j), a.getY(j), a.getZ(j)).applyMatrix4(L.group.matrixWorld).sub(pos).normalize();
       return [w.dot(f.north), w.dot(f.up), w.dot(f.east)];
     });
-    T.hist.push(sample); if (T.hist.length > TRAIL_MAX) T.hist.shift(); T.lastT = t;
+    T.hist.push(sample); if (T.hist.length > TRAIL_MAX) T.hist.shift(); T.lastT = t; T.dirty = true;
   }
+  // Rebuilding every segment is costly, so only do it when a sample was added or the observer moved.
+  const pk = pos.x + ',' + pos.y + ',' + pos.z;
+  T.line.material.opacity = 0.75 * opacity;
+  if (!T.dirty && pk === T.pk) return;
+  T.dirty = false; T.pk = pk;
   const P = T.line.geometry.attributes.position, C = T.line.geometry.attributes.color, R = 5e8; let n = 0;
   const toW = ([a, b, c]) => w.copy(f.north).multiplyScalar(a).addScaledVector(f.up, b).addScaledVector(f.east, c).multiplyScalar(R).add(pos);
   for (let h = 1; h < T.hist.length; h++) for (let k = 0; k < T.idx.length; k++) {
@@ -2704,7 +2723,7 @@ function updateTrails(V, T, L, opacity) {
     toW(T.hist[h - 1][k]); P.setXYZ(n, w.x, w.y, w.z); C.setXYZ(n++, c.r * fade, c.g * fade, c.b * fade);
     toW(T.hist[h][k]); P.setXYZ(n, w.x, w.y, w.z); C.setXYZ(n++, c.r * fade, c.g * fade, c.b * fade);
   }
-  T.line.geometry.setDrawRange(0, n); P.needsUpdate = C.needsUpdate = true; T.line.material.opacity = 0.75 * opacity;
+  T.line.geometry.setDrawRange(0, n); P.needsUpdate = C.needsUpdate = true;
 }
 function showStars(L, opacity) {
   const stars = S.stars !== "off" && opacity > 0.01;
@@ -3444,7 +3463,7 @@ function initHelp() {
 // ---------- language switch
 // Fixed page text is captured once in English, then swapped from the FR dictionary (plain text) or FRH (blocks with markup).
 const I18N = { nodes: [], attrs: [], html: [] };
-const DYNAMIC = new Set(["eclipse", "play", "flatSub", "tz", "place", "distA", "distB", "flights", "savedList", "cmpBody", "cmpWhere", "eclipseInfo", "faceNote", "feNote", "feSliders", "solarTime", "altOut", "railBtn"]);
+const DYNAMIC = new Set(["eclipse", "play", "flatSub", "tz", "place", "distA", "distB", "flights", "savedList", "cmpBody", "cmpWhere", "eclipseInfo", "faceNote", "feNote", "feSliders", "solarTime", "altOut", "railBtn", "fsBtn"]);
 function captureStatic() {
   const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: n => {
     for (let e = n.parentElement; e; e = e.parentElement) { if (e.tagName === "SCRIPT" || e.tagName === "STYLE" || e.hasAttribute("data-trh") || DYNAMIC.has(e.id)) return NodeFilter.FILTER_REJECT; }
@@ -3464,7 +3483,7 @@ function applyStatic() {
   document.title = L("Globe vs Flat Earth", "Globe vs Terre Plate");
   document.querySelectorAll("#segUnits button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === UNITS)));
   document.querySelectorAll("#segLang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === LANG)));
-  setRail(railOpen);
+  setRail(railOpen); setFsBtn();
 }
 // ---------- hover tips on the top bar (data-tip, translated with the rest of the page)
 (() => {
@@ -3490,6 +3509,25 @@ function setRail(open) {
   const b = $("railBtn"), t = open ? L("Hide the panel", "Masquer le panneau") : L("Show the panel", "Afficher le panneau");
   b.textContent = open ? "«" : "»"; b.title = t; b.setAttribute("aria-label", t); b.setAttribute("aria-expanded", String(open));
 }
+// ---------- full screen for "beautiful views": whatever is shown (both models, Globe or Flat) fills the screen, no options on top
+var ICON_FS_IN = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1.5 5.5v-4h4M10.5 1.5h4v4M14.5 10.5v4h-4M5.5 14.5h-4v-4"/></svg>';
+var ICON_FS_OUT = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5.5 1.5v4h-4M14.5 5.5h-4v-4M10.5 14.5v-4h4M1.5 10.5h4v4"/></svg>';
+var fsOn = false;
+function setFsBtn() {
+  const b = $("fsBtn"); if (!ICON_FS_IN) return; const t = fsOn ? L("Exit full screen (Esc)", "Quitter le plein écran (Échap)") : L("Full screen: just the views, no options", "Plein écran : seulement les vues, sans options");
+  b.innerHTML = fsOn ? ICON_FS_OUT : ICON_FS_IN; b.title = t; b.setAttribute("aria-label", t); b.setAttribute("aria-pressed", String(fsOn));
+}
+function setFs(on) {
+  if (on === fsOn) return;
+  fsOn = on; $("views").classList.toggle("fs", on); document.body.classList.toggle("fs-on", on); setFsBtn();
+  const el = $("views");
+  if (on && el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().catch(() => {});
+  if (!on && document.fullscreenElement) document.exitFullscreen().catch(() => {});
+}
+$("fsBtn").addEventListener("click", () => setFs(!fsOn));
+document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement && fsOn) setFs(false); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && fsOn) setFs(false); });
+setFsBtn();
 $("railBtn").addEventListener("click", () => { setRail(!railOpen); try { localStorage.setItem("gvf-rail", railOpen ? "1" : "0"); } catch (e) {} });
 function setLang(v) {
   LANG = v; try { localStorage.setItem("gvf-lang", v); } catch (e) {}
@@ -3867,5 +3905,268 @@ rebuildRoutes();
 loadEarthImages();
 requestAnimationFrame(frame);
 window.__sim = { S, G, F, changed, I18N, setLang, eqCanvas, flatCanvas, flatXZ, sun: () => SUN, STARS };
+})();
+</script>
+<script>// Hidden demo mode for recording the video: ?demo=all (or a scene number 1-11) &lang=en|fr [&cap=1 shows the narration as captions].
+// It never runs for normal visitors.
+if (/[?&]demo=/.test(location.search)) (() => {
+  const P = new URLSearchParams(location.search), lang = P.get("lang") === "fr" ? "fr" : "en", which = P.get("demo"), showCap = P.get("cap") === "1";
+  const NARR = {"en":{"1":"This... is a sunset, on one evening, on one beach in Brittany, France. On the left, the Earth is a globe. On the right, it is flat. Only one of these two models matches what you would actually see.","2":"Hi, I'm Nico. When people describe how a flat Earth is supposed to work, the explanations change from one video to the next. The Sun is described as a kind of spotlight, or it is fading far away, or perspective hides it when evening comes. Words like that are often said on Flat Earth channels and difficult to imagine, but they are super easy to check. So I built a simulator that solves just that: it takes each model and calculates it exactly, using geometry, for any place and any moment. It lets you see something that is not always easy to imagine. Then you can simply compare it with the real sky outside your window.","3":"The page always shows both models side by side. The globe uses real astronomy, as it is observed and measured: real positions of the Sun, Moon, planets and stars as the geometry of a sphere predicts them. The flat model uses the map flat-earthers use, the infamous Gleason map, with a small, local Sun and Moon circling about 4,800 km above the ground. Each one sits straight above the place where it is overhead in the real world at that moment. Underneath, the prediction table puts the numbers next to each other: the observations, the globe model predictions, and the Flat Earth model predictions. When the Sun rises and sets, where it stands, how far the horizon is, and so on. Each line is something you can check by yourself.","4":"Pick any place in the world: a capital from the list, or your own town with the search box. Both views move there at once. The red circle on the flat side shows where the real Sun is at that moment. When the Flat Earth Sun and the red circle disagree, it means that the flat model is predicting a sky that nobody actually sees.","5":"You can stand on the ground, fly at airliner height, or join the International Space Station. On the globe the horizon drops below eye level and starts to curve as you climb, exactly as pilots and astronauts film it. On a flat Earth the horizon would stay at eye level forever, fading into a haze that blends ground and sky as the distance grows. Higher still, you get the whole picture: the globe lit by the Sun on one side, and the flat disc under its little spotlight.","6":"Press Play and time runs. Here a whole day passes in 30 seconds. With Follow, the view keeps the Sun (or any other sky object) in frame. At night the stars come out, and with trails switched on you see them circle the poles, the way long-exposure photos show them everywhere on Earth.","7":"The real events list takes you to moments that really happened. For instance: in December 2024, four flat-earthers and four globe supporters went to Antarctica to watch the Sun. All the flat-earthers admitted the 24-hour Sun is real. The globe predicts it, but the flat model predicts night there: its Sun never sets, it just circles too far away to light Antarctica. The list also has eclipses, past and coming: here is the total eclipse that will happen over Luxor, in Egypt, in August 2027, with the Moon's shadow crossing the globe in the middle of the day. On the flat model, there is simply no way to make that shadow.","8":"The distance tool measures between any two places on both models. You can also tick a real flight, like Qantas from Sydney to Santiago: about 12 hours in the air. On the globe the trip is about 11,300 km, so about 945 km/h: a normal airliner speed. On the flat map the same trip is {D}, so the plane would need to fly at {V}. Airlines publish these times every day.","9":"And because flat-earthers don't all agree on the numbers, you can change them yourself: the height of the Sun, its size, the reach of the \"spotlight\", the height of the dome. Try any combination you like. The real Sun you can observe, in red, doesn't move. No setting makes the flat model match it everywhere at once.","10":"The simulator is free, it's available in English and French, it works in any browser, and (it's important to me), it collects no personal data. Open it, pick your town, and then go outside and look at the sky: it will tell you which model is right. Curious minds are welcome: feel free to leave your questions, your comments, or ideas for improvements under this video. The link to the website is in the description. Thank you!","11":""},"fr":{"1":"Voici… un coucher de soleil, un soir, sur une plage de Bretagne, en France. À gauche, la Terre est une sphère. À droite, elle est plate. Un seul de ces deux modèles correspond à ce que vous verriez vraiment.","2":"Salut, moi c'est Nico. Quand on décrit comment la Terre plate est censée fonctionner, les explications changent d'une vidéo à l'autre. Le Soleil est décrit comme un genre de projecteur, qui disparaît au loin, ou bien c'est la perspective qui le cache le soir venu. Ces affirmations reviennent souvent sur les chaînes platistes : difficiles à imaginer, mais elles sont très faciles à vérifier. J'ai donc créé un simulateur qui fait exactement ça : il calcule chaque modèle avec précision, par la géométrie, depuis n'importe quel lieu et à n'importe quel moment. Il vous permet de voir ce qui n'est pas toujours facile à imaginer. Il vous suffit ensuite de comparer avec le vrai ciel, que vous pouvez observer par votre fenêtre.","3":"La page montre toujours les deux modèles côte à côte. Le globe utilise la vraie astronomie, telle qu'elle est observée et mesurée : les positions réelles du Soleil, de la Lune, des planètes et des étoiles, comme la géométrie d'une sphère les prédit. Le modèle Terre Plate utilise la carte des platistes, la fameuse carte de Gleason, avec un petit Soleil et une petite Lune, proches et locaux, qui tournent à environ 4 800 km au-dessus du sol. Chacun est placé juste au-dessus de l'endroit où il est à la verticale dans le monde réel à cet instant. En dessous, le tableau des prédictions met les chiffres côte à côte : les observations, les prédictions du globe et celles du modèle Terre Plate. Quand le Soleil se lève et se couche, où il se trouve, à quelle distance est l'horizon, etc. Chaque ligne est quelque chose que vous pouvez vérifier vous-même.","4":"Choisissez n'importe quel endroit du monde : une capitale dans la liste, ou votre propre ville avec la barre de recherche. Les deux vues s'y déplacent aussitôt. Le cercle rouge, côté Terre Plate, montre où se trouve le vrai Soleil à cet instant. Quand le Soleil de la Terre Plate et le cercle rouge ne sont pas d'accord, cela signifie que le modèle Terre Plate prédit un ciel que personne ne voit vraiment.","5":"Vous pouvez rester au sol, voler à l'altitude d'un avion de ligne, ou même rejoindre la Station spatiale internationale. Sur le globe, l'horizon descend sous le niveau des yeux et commence à se courber à mesure que vous montez, exactement comme le filment pilotes et astronautes. Sur une Terre plate, l'horizon resterait toujours au niveau des yeux, en se perdant dans une brume confondant la terre et le ciel à mesure que les distances augmentent. Plus haut encore, on voit l'ensemble : le globe éclairé d'un côté par le Soleil, et le disque plat sous son petit projecteur.","6":"Appuyez sur Lecture et le temps défile. Ici, une journée entière passe en 30 secondes. Avec l'option Suivre, la vue garde le Soleil (ou tout autre objet céleste) dans le cadre. La nuit, les étoiles apparaissent, et avec les traînées, on les voit tourner autour des pôles, comme sur les photos en pose longue prises partout sur Terre.","7":"La liste des événements réels vous emmène à des moments qui ont vraiment eu lieu. Par exemple : en décembre 2024, quatre platistes et quatre défenseurs du globe sont allés en Antarctique pour observer le Soleil. Tous les platistes ont reconnu que le Soleil de 24 heures est réel. Le globe le prédit, mais le modèle Terre Plate y prédit la nuit : son Soleil ne se couche jamais, il tourne simplement trop loin pour éclairer l'Antarctique. La liste contient aussi des éclipses, passées et à venir : voici l'éclipse totale qui aura lieu au-dessus de Louxor, en Égypte, en août 2027, avec l'ombre de la Lune qui traverse le globe en plein milieu de journée. Avec le modèle Terre Plate, il n'existe tout simplement aucun moyen de produire cette ombre.","8":"L'outil Distance mesure l'espacement entre deux lieux sur les deux modèles. Vous pouvez aussi cocher un vrai vol, comme celui de Qantas de Sydney à Santiago : environ 12 heures de vol. Sur le globe, le trajet fait environ 11 300 km, soit environ 945 km/h : la vitesse normale d'un avion de ligne. Sur la carte plate, le même trajet fait {D}, donc l'avion devrait voler à {V}. Les compagnies aériennes publient ces durées tous les jours.","9":"Et comme les platistes ne sont pas tous d'accord sur les chiffres, vous pouvez les changer vous-même : la hauteur du Soleil, sa taille, la portée du « projecteur », la hauteur du dôme. Essayez toutes les combinaisons que vous voulez. Le vrai Soleil observable, en rouge, ne bouge pas. Aucun réglage ne permet au modèle Terre Plate de coïncider avec lui partout à la fois.","10":"Le simulateur est gratuit, il est disponible en anglais et en français, il fonctionne dans n'importe quel navigateur et, c'est important pour moi, il ne collecte aucune donnée personnelle. Ouvrez-le, choisissez votre ville, puis sortez et regardez le ciel : il vous dira quel modèle est le bon. Les esprits curieux sont les bienvenus : n'hésitez pas à laisser vos questions, vos commentaires ou vos idées d'amélioration sous la vidéo. Le lien vers le site est dans la description. Merci !","11":""}};
+  // Each scene is fitted to Nico's voice clip (voice/timing.js): DUR = new length, WARP maps new time to the scene's original keyframe time.
+  const TIMING = {"en":{"dur":{"1":19.4,"2":46.8,"3":54.1,"4":28.22,"5":31.4,"6":30.81,"7":49.7,"8":45.38,"9":23.4,"10":32,"11":10,"9.5":78},"warp":{"1":[[0,0],[25,19.4]],"2":[[0,0],[5,5.29],[60,46.8]],"3":[[0,0],[1.5,3.1],[3,6.54],[12,17.5],[26,35.31],[29,38.31],[50,54.1]],"4":[[0,0],[2,1.12],[10,3.32],[17,4.52],[24,7.21],[28,9.72],[40,21.72],[50,28.22]],"5":[[0,0],[5,1.7],[17,6.6],[26,14.26],[36,22.74],[45,31.4]],"6":[[0,0],[0.5,2.15],[7,6.13],[17,13.31],[30,16.31],[50,30.31],[50,30.81]],"7":[[0,0],[2,5.32],[33,29.4],[43,33.4],[67,47.4],[70,49.7]],"8":[[0,0],[2,2.14],[13,5.13],[16,6.63],[22,21.37],[32,34.08],[50,45.38]],"9":[[0,0],[4,3.43],[36,20.5],[40,23.4]],"10":[[0,0],[30,32]],"11":[[0,0],[10,10]],"9.5":[[0,0],[78,78]]},"voice":{"1":1.5,"2":4.5,"3":0.8,"4":0.8,"5":0.8,"6":0.8,"7":0.8,"8":0.8,"9":0.8,"10":0.8},"subs":{"1":[[1.95,2.78,"This..."],[4.55,9.17,"is a sunset, on one evening, on one beach in Brittany, France."],[10.04,11.91,"On the left, the Earth is a globe."],[12.55,14.01,"On the right, it is flat."],[15.18,18.04,"Only one of these two models matches what you would actually see."]],"2":[[5.29,6.32,"Hi, I'm Nico."],[7.24,13.07,"When people describe how a flat Earth is supposed to work, the explanations change from one video to the next."],[13.53,20.44,"The Sun is described as a kind of spotlight, or it is fading far away, or perspective hides it when evening comes."],[21.54,28.33,"Words like that are often said on Flat Earth channels and difficult to imagine, but they are super easy to check."],[28.7,37.59,"So I built a simulator that solves just that: it takes each model and calculates it exactly, using geometry, for any place and any moment."],[37.94,41.16,"It lets you see something that is not always easy to imagine."],[42.15,45.46,"Then you can simply compare it with the real sky outside your window."]],"3":[[3.1,5.84,"The page always shows both models side by side."],[6.54,16.36,"The globe uses real astronomy, as it is observed and measured: real positions of the Sun, Moon, planets and stars as the geometry of a sphere predicts them."],[17.5,28.32,"The flat model uses the map flat-earthers use, the infamous Gleason map, with a small, local Sun and Moon circling about 4,800 km above the ground."],[29.62,34.38,"Each one sits straight above the place where it is overhead in the real world at that moment."],[35.31,43.62,"Underneath, the prediction table puts the numbers next to each other: the observations, the globe model predictions, and the Flat Earth model predictions."],[44.76,49.33,"When the Sun rises and sets, where it stands, how far the horizon is, and so on."],[50.43,52.61,"Each line is something you can check by yourself."]],"4":[[1.12,6.76,"Pick any place in the world: a capital from the list, or your own town with the search box."],[7.21,8.85,"Both views move there at once."],[9.72,13.82,"The red circle on the flat side shows where the real Sun is at that moment."],[14.46,21.22,"When the Flat Earth Sun and the red circle disagree, it means that the flat model is predicting a sky that nobody actually sees."]],"5":[[1.1,5.89,"You can stand on the ground, fly at airliner height, or join the International Space Station."],[6.6,13.62,"On the globe the horizon drops below eye level and starts to curve as you climb, exactly as pilots and astronauts film it."],[14.26,22.09,"On a flat Earth the horizon would stay at eye level forever, fading into a haze that blends ground and sky as the distance grows."],[22.74,30.2,"Higher still, you get the whole picture: the globe lit by the Sun on one side, and the flat disc under its little spotlight."]],"6":[[2.15,2.47,"Press Play and time runs."],[3.09,5.48,"Here a whole day passes in 30 seconds."],[6.13,13,"With Follow, the view keeps the Sun (or any other sky object) in frame."],[13.31,23.7,"At night the stars come out, and with trails switched on you see them circle the poles, the way long-exposure photos show them everywhere on Earth."]],"7":[[4.32,7.27,"The real events list takes you to moments that really happened."],[7.99,15.21,"For instance: in December 2024, four flat-earthers and four globe supporters went to Antarctica to watch the Sun."],[16.35,19.21,"All the flat-earthers admitted the 24-hour Sun is real."],[20.34,28.19,"The globe predicts it, but the flat model predicts night there: its Sun never sets, it just circles too far away to light Antarctica."],[29.4,41.25,"The list also has eclipses, past and coming: here is the total eclipse that will happen over Luxor, in Egypt, in August 2027, with the Moon's shadow crossing the globe in the middle of the day."],[41.93,45.2,"On the flat model, there is simply no way to make that shadow."]],"8":[[1.14,4.66,"The distance tool measures between any two places on both models."],[5.13,15.43,"You can also tick a real flight, like Qantas from Sydney to Santiago: about 12 hours in the air."],[15.85,20.76,"On the globe the trip is about 11,300 km, so about 945 km/h: a normal airliner speed."],[21.67,31.48,"On the flat map the same trip is about 25,700 km, so the plane would need to fly at about 2,140 km/h."],[32.12,34.08,"Airlines publish these times every day."]],"9":[[2.43,11.41,"And because flat-earthers don't all agree on the numbers, you can change them yourself: the height of the Sun, its size, the reach of the \"spotlight\", the height of the dome."],[12.21,13.8,"Try any combination you like."],[14.39,17.21,"The real Sun you can observe, in red, doesn't move."],[17.98,21,"No setting makes the flat model match it everywhere at once."]],"10":[[3.12,11.55,"The simulator is free, it's available in English and French, it works in any browser, and (it's important to me), it collects no personal data."],[12.52,18.21,"Open it, pick your town, and then go outside and look at the sky: it will tell you which model is right."],[19.29,25.29,"Curious minds are welcome: feel free to leave your questions, your comments, or ideas for improvements under this video."],[26.14,27.99,"The link to the website is in the description."],[28.85,29.15,"Thank you!"]]},"total":449.2},"fr":{"dur":{"1":18,"2":43.9,"3":53.8,"4":31.9,"5":34.6,"6":30.07,"7":47.86,"8":43.61,"9":22.9,"10":31.4,"11":10,"9.5":78},"warp":{"1":[[0,0],[25,18]],"2":[[0,0],[5,4.87],[60,43.9]],"3":[[0,0],[1.5,3.66],[3,6.67],[12,17.62],[26,35.93],[29,38.93],[50,53.8]],"4":[[0,0],[2,2.59],[10,4.79],[17,5.99],[24,9.53],[28,12.32],[40,25.4],[50,31.9]],"5":[[0,0],[5,1.72],[17,9.1],[26,17.64],[36,26.95],[45,34.6]],"6":[[0,0],[0.5,0.8],[7,7.15],[17,12.57],[30,15.57],[50,29.57],[50,30.07]],"7":[[0,0],[2,3.63],[33,27.56],[43,31.56],[67,45.56],[70,47.86]],"8":[[0,0],[2,2.72],[13,5.82],[16,7.32],[22,20.83],[32,32.31],[50,43.61]],"9":[[0,0],[4,2.42],[36,20],[40,22.9]],"10":[[0,0],[30,31.4]],"11":[[0,0],[10,10]],"9.5":[[0,0],[78,78]]},"voice":{"1":1.5,"2":4.5,"3":0.8,"4":0.8,"5":0.8,"6":0.8,"7":0.8,"8":0.8,"9":0.8,"10":0.8},"subs":{"1":[[1.96,2.4,"Voici…"],[2.4,7.44,"un coucher de soleil, un soir, sur une plage de Bretagne, en France."],[7.44,9.96,"À gauche, la Terre est une sphère."],[9.96,11.81,"À droite, elle est plate."],[11.81,17,"Un seul de ces deux modèles correspond à ce que vous verriez vraiment."]],"2":[[4.87,6.23,"Salut, moi c'est Nico."],[6.96,11.67,"Quand on décrit comment la Terre plate est censée fonctionner, les explications changent d'une vidéo à l'autre."],[12.14,18.1,"Le Soleil est décrit comme un genre de projecteur, qui disparaît au loin, ou bien c'est la perspective qui le cache le soir venu."],[18.91,24.92,"Ces affirmations reviennent souvent sur les chaînes platistes : difficiles à imaginer, mais elles sont très faciles à vérifier."],[25.7,34.5,"J'ai donc créé un simulateur qui fait exactement ça : il calcule chaque modèle avec précision, par la géométrie, depuis n'importe quel lieu et à n'importe quel moment."],[35.34,37.77,"Il vous permet de voir ce qui n'est pas toujours facile à imaginer."],[38.27,42.59,"Il vous suffit ensuite de comparer avec le vrai ciel, que vous pouvez observer par votre fenêtre."]],"3":[[3.66,6.19,"La page montre toujours les deux modèles côte à côte."],[6.67,16.82,"Le globe utilise la vraie astronomie, telle qu'elle est observée et mesurée : les positions réelles du Soleil, de la Lune, des planètes et des étoiles, comme la géométrie d'une sphère les prédit."],[17.62,29.05,"Le modèle Terre Plate utilise la carte des platistes, la fameuse carte de Gleason, avec un petit Soleil et une petite Lune, proches et locaux, qui tournent à environ 4 800 km au-dessus du sol."],[29.88,34.73,"Chacun est placé juste au-dessus de l'endroit où il est à la verticale dans le monde réel à cet instant."],[35.93,43.1,"En dessous, le tableau des prédictions met les chiffres côte à côte : les observations, les prédictions du globe et celles du modèle Terre Plate."],[44.21,48.57,"Quand le Soleil se lève et se couche, où il se trouve, à quelle distance est l'horizon, etc."],[49.49,52.28,"Chaque ligne est quelque chose que vous pouvez vérifier vous-même."]],"4":[[2.59,8.63,"Choisissez n'importe quel endroit du monde : une capitale dans la liste, ou votre propre ville avec la barre de recherche."],[9.53,11.14,"Les deux vues s'y déplacent aussitôt."],[12.32,16.51,"Le cercle rouge, côté Terre Plate, montre où se trouve le vrai Soleil à cet instant."],[17.62,24.9,"Quand le Soleil de la Terre Plate et le cercle rouge ne sont pas d'accord, cela signifie que le modèle Terre Plate prédit un ciel que personne ne voit vraiment."]],"5":[[1.12,8.18,"Vous pouvez rester au sol, voler à l'altitude d'un avion de ligne, ou même rejoindre la Station spatiale internationale."],[9.1,17.01,"Sur le globe, l'horizon descend sous le niveau des yeux et commence à se courber à mesure que vous montez, exactement comme le filment pilotes et astronautes."],[17.64,25.86,"Sur une Terre plate, l'horizon resterait toujours au niveau des yeux, en se perdant dans une brume confondant la terre et le ciel à mesure que les distances augmentent."],[26.95,33.06,"Plus haut encore, on voit l'ensemble : le globe éclairé d'un côté par le Soleil, et le disque plat sous son petit projecteur."]],"6":[[0.8,3.06,"Appuyez sur Lecture et le temps défile."],[3.85,6.2,"Ici, une journée entière passe en 30 secondes."],[7.15,11.76,"Avec l'option Suivre, la vue garde le Soleil (ou tout autre objet céleste) dans le cadre."],[12.57,20.17,"La nuit, les étoiles apparaissent, et avec les traînées, on les voit tourner autour des pôles, comme sur les photos en pose longue prises partout sur Terre."]],"7":[[2.63,6.32,"La liste des événements réels vous emmène à des moments qui ont vraiment eu lieu."],[6.7,14.07,"Par exemple : en décembre 2024, quatre platistes et quatre défenseurs du globe sont allés en Antarctique pour observer le Soleil."],[14.93,18.17,"Tous les platistes ont reconnu que le Soleil de 24 heures est réel."],[19.07,27.03,"Le globe le prédit, mais le modèle Terre Plate y prédit la nuit : son Soleil ne se couche jamais, il tourne simplement trop loin pour éclairer l'Antarctique."],[27.56,39.64,"La liste contient aussi des éclipses, passées et à venir : voici l'éclipse totale qui aura lieu au-dessus de Louxor, en Égypte, en août 2027, avec l'ombre de la Lune qui traverse le globe en plein milieu de journée."],[40.48,44.8,"Avec le modèle Terre Plate, il n'existe tout simplement aucun moyen de produire cette ombre."]],"8":[[1.72,5.16,"L'outil Distance mesure l'espacement entre deux lieux sur les deux modèles."],[5.82,11.69,"Vous pouvez aussi cocher un vrai vol, comme celui de Qantas de Sydney à Santiago : environ 12 heures de vol."],[12.42,20.39,"Sur le globe, le trajet fait environ 11 300 km, soit environ 945 km/h : la vitesse normale d'un avion de ligne."],[21.13,29.03,"Sur la carte plate, le même trajet fait environ 25 700 km, donc l'avion devrait voler à environ 2 140 km/h."],[29.71,32.31,"Les compagnies aériennes publient ces durées tous les jours."]],"9":[[1.42,9.96,"Et comme les platistes ne sont pas tous d'accord sur les chiffres, vous pouvez les changer vous-même : la hauteur du Soleil, sa taille, la portée du « projecteur », la hauteur du dôme."],[10.88,12.58,"Essayez toutes les combinaisons que vous voulez."],[13.01,15.51,"Le vrai Soleil observable, en rouge, ne bouge pas."],[16.44,20.5,"Aucun réglage ne permet au modèle Terre Plate de coïncider avec lui partout à la fois."]],"10":[[3.34,12.15,"Le simulateur est gratuit, il est disponible en anglais et en français, il fonctionne dans n'importe quel navigateur et, c'est important pour moi, il ne collecte aucune donnée personnelle."],[13.06,17.97,"Ouvrez-le, choisissez votre ville, puis sortez et regardez le ciel : il vous dira quel modèle est le bon."],[18.69,25.24,"Les esprits curieux sont les bienvenus : n'hésitez pas à laisser vos questions, vos commentaires ou vos idées d'amélioration sous la vidéo."],[25.78,27.74,"Le lien vers le site est dans la description."],[28.25,28.57,"Merci !"]]},"total":446}}, TM = TIMING[lang];
+  const DUR0 = { 9.5: 78, 1: 25, 2: 60, 3: 50, 4: 50, 5: 45, 6: 50, 7: 70, 8: 50, 9: 40, 10: 30, 11: 10 }, DUR = TM.dur;
+  const warp = (sc, t) => { const w = TM.warp[sc]; for (let i = 1; i < w.length; i++) if (t <= w[i][1]) return w[i - 1][0] + (w[i][0] - w[i - 1][0]) * (t - w[i - 1][1]) / Math.max(1e-6, w[i][1] - w[i - 1][1]); return w[w.length - 1][0]; };
+  const CAP_START = { 9.5: 0, 1: 1, 2: 5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.5, 7: 0.5, 8: 0.5, 9: 0.5, 10: 0.5, 11: 0 };
+  const list = which === "all" ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 9.5, 10, 11] : [+which];
+  __sim.setLang(lang);
+  const u = document.querySelector('#segUnits button[data-v="metric"]'); if (u && u.getAttribute("aria-pressed") !== "true") u.click();
+  const st = document.createElement("style");
+  st.textContent = `.note{display:none!important} .tip{display:none!important} html{scrollbar-width:none} ::-webkit-scrollbar{display:none} *{cursor:none!important}
+#dcap{position:fixed;left:50%;bottom:40px;transform:translateX(-50%);max-width:1300px;padding:12px 24px;background:rgba(0,0,0,.72);color:#fff;font:500 31px/1.35 Archivo,Arial,sans-serif;text-align:center;border-radius:10px;z-index:101}
+#dcap:empty{display:none}
+#dlabel{position:fixed;left:40px;bottom:36px;z-index:101;padding:10px 20px;background:rgba(5,7,12,.6);color:#fff;font:600 30px/1.3 Archivo,Arial,sans-serif;border-radius:10px;display:none}
+body.dfull .views{position:fixed;inset:0;z-index:97;gap:4px;background:#000}
+body.dfull .view{height:100vh!important;border:0;border-radius:0}
+body.dfull .hud,body.dfull .compass,body.dfull .flightbox{display:none!important}
+body.dfull .tag b{font-size:30px}body.dfull .tag span{display:none}
+#dbox{position:fixed;border:3px solid #b78cff;border-radius:12px;box-shadow:0 0 24px rgba(183,140,255,.6);z-index:98;pointer-events:none;display:none}
+#dtitle,#dend,#dblack{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Archivo,Arial,sans-serif;color:#fff}
+#dtitle,#dblack{background:#05070c}#dblack{z-index:102}
+#dtitle h1,#dend h1{margin:0;font-size:140px;font-weight:800}#dtitle .g,#dend .g{color:#38e1ff}#dtitle .f,#dend .f{color:#ffb547}#dtitle small,#dend small{font-size:56px;color:#9aa4b8;margin:0 28px}
+#dend h1{font-size:112px}#dend .url{margin-top:32px;font-size:52px;font-weight:700;color:#b78cff}#dend .sub{margin-top:30px;font-size:36px;color:#dfe6f3}#dend .sub2{margin-top:12px;font-size:28px;color:#9aa4b8}`;
+  document.head.appendChild(st);
+  for (const id of ["dcap", "dbox", "dblack"]) { const d = document.createElement("div"); d.id = id; document.body.appendChild(d); }
+  const tt = document.createElement("div"); tt.id = "dtitle"; tt.innerHTML = `<h1><span class="g">Globe</span><small>vs</small><span class="f">${lang === "fr" ? "Terre Plate" : "Flat Earth"}</span></h1>`; tt.style.display = "none"; document.body.appendChild(tt);
+  window.__d = { title: o => { tt.style.display = o > 0 ? "flex" : "none"; tt.style.opacity = o; }, cap: s => { const c = document.getElementById("dcap"); if (c.textContent !== s) c.textContent = s; } };
+  // Scene 8 quotes the flat-map distance Sydney-Santiago and the speed a 12-hour flight would need.
+  const a = __sim.flatXZ(-33.8688, 151.2093), b = __sim.flatXZ(-33.4489, -70.6693), km = Math.hypot(a[0] - b[0], a[1] - b[1]);
+  const f = (v, s) => { const r = Math.round(v / s) * s; return lang === "fr" ? r.toLocaleString("fr-FR").replace(/[  ]/g, " ") : r.toLocaleString("en-US"); };
+  const N = Object.assign({}, NARR[lang]), ab = lang === "fr" ? "environ " : "about ";
+  N[8] = N[8].replace("{D}", ab + f(km, 100) + " km").replace("{V}", ab + f(km / 12, 10) + " km/h");
+  const sentences = t => t ? t.match(/[^.!?]+[.!?]+(\s|$)/g).map(s => s.trim()) : [];
+  const captionAt = (sc, t) => { const x = (TM.subs[sc] || []).find(([a, b]) => t >= a && t < b + 0.6); return x ? x[2].replace("{D}", "").replace("{V}", "") : ""; };
+
+// Runs inside the page. window.__scene(scene, t, dur, lang) sets the state for time t (s) and returns a key when the frame is static.
+(() => {
+  const $ = id => document.getElementById(id);
+  const S = __sim.S, F = __sim.F, G = __sim.G;
+  const e = x => x < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x);
+  const lerp = (a, b, x) => a + (b - a) * x;
+  const seg = (id, v) => { const b = document.querySelector(`#${id} button[data-v="${v}"]`); if (b && b.getAttribute('aria-pressed') !== 'true') b.click(); };
+  const once = new Set(); const first = k => { if (once.has(k)) return false; once.add(k); return true; };
+  const pickOpt = (sel, re) => { const o = [...$(sel).options].find(o => re.test(o.textContent) || re.test(o.value)); if (o && $(sel).value !== o.value) { $(sel).value = o.value; $(sel).dispatchEvent(new Event('change', { bubbles: true })); } };
+  const openFold = el => { const d = el.closest('details'); if (d && !d.open) d.open = true; };
+  const box = (el, pad = 6) => {
+    const bx = $('dbox'); if (typeof el === 'string') el = document.querySelector(el);
+    if (!el) { bx.style.display = 'none'; return; }
+    const r = el.getBoundingClientRect(); Object.assign(bx.style, { display: 'block', left: r.left - pad + 'px', top: r.top - pad + 'px', width: r.width + 2 * pad + 'px', height: r.height + 2 * pad + 'px' });
+  };
+  const rail = open => { const sh = document.querySelector('.shell'); if (sh.classList.contains('norail') === open) $('railBtn').click(); };
+  const into = el => { if (typeof el === 'string') el = document.querySelector(el); const r = el.getBoundingClientRect(), rl = document.querySelector('.rail'); if (r.top < 80 || r.bottom > innerHeight - 20) el.scrollIntoView({ block: 'center' }); };
+  const slide = (id, v) => { const el = $(id); if (+el.value !== v) { el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); } };
+  const dip = h => Math.acos(6371 / (6371 + h)) * 180 / Math.PI;
+  // A place on the globe as seen in the scene: the Earth turns by the sidereal angle.
+  const world = (lat, lon, r) => {
+    const D = Math.PI / 180, c = Math.cos(lat * D), v = new THREE.Vector3(c * Math.cos(lon * D), Math.sin(lat * D), -c * Math.sin(lon * D));
+    return v.applyAxisAngle(new THREE.Vector3(0, 1, 0), __sim.sun().gast * 15 * D).multiplyScalar(r);
+  };
+  const piece = (t, pts) => { // pts: [[t, v], ...] eased between keys
+    if (t <= pts[0][0]) return pts[0][1];
+    for (let i = 1; i < pts.length; i++) if (t <= pts[i][0]) return lerp(pts[i - 1][1], pts[i][1], e((t - pts[i - 1][0]) / (pts[i][0] - pts[i - 1][0])));
+    return pts[pts.length - 1][1];
+  };
+  const endCard = (o, black, lang) => {
+    let d = $('dend');
+    if (!d) { d = document.createElement('div'); d.id = 'dend'; document.body.appendChild(d); }
+    d.style.display = o ? 'flex' : 'none';
+    d.style.background = black ? '#05070c' : 'linear-gradient(180deg, rgba(5,7,12,.55), rgba(5,7,12,.82))';
+    const fr = lang === 'fr';
+    d.innerHTML = `<h1><span class="g">Globe</span><small>vs</small><span class="f">${fr ? 'Terre Plate' : 'Flat Earth'}</span></h1><div class="url">nikbtd.github.io/globe-vs-flat</div>`
+      + (black ? '' : `<div class="sub">${fr ? 'Gratuit · Sans inscription · Sans pistage' : 'Free · No sign-in · No tracking'}</div><div class="sub2">English · Français</div>`);
+  };
+  // Montage shots: one or both views fill the screen, with a small caption naming the shot.
+  const full = (models, label) => {
+    document.body.classList.toggle('dfull', !!models);
+    seg('segModels', models || 'both');
+    let l = $('dlabel'); if (!l) { l = document.createElement('div'); l.id = 'dlabel'; document.body.appendChild(l); }
+    l.textContent = models && label ? label : ''; l.style.display = models && label ? 'block' : 'none';
+  };
+  let lastScene = 0;
+  window.__scene = (sc, t, dur, lang) => {
+    if (sc !== lastScene) {
+      // Routes and distance lines belong to scene 8 only: clear them everywhere else.
+      if (sc !== 8) {
+        document.querySelectorAll('#flights input[type=checkbox]').forEach(cb => { if (cb.checked) { cb.checked = false; cb.dispatchEvent(new Event('change', { bubbles: true })); } });
+        if ($('drawDist').checked) { $('drawDist').checked = false; $('drawDist').dispatchEvent(new Event('change', { bubbles: true })); }
+        if (S.distShown) $('eraseDist').click();
+      }
+      once.clear(); lastScene = sc; full(null); if (sc !== 6) seg('segStars', 'on'); box(null); endCard(0); S.follow = 'off'; $('follow').value = 'off'; S.playing = false; window.scrollTo(0, 0); }
+    S.playing = false;
+    let key = null;
+    if (sc === 1) {
+      rail(false); seg('segView', 'observer');
+      S.lat = 48.2058; S.lon = -4.5539; S.alt = 0.3; S.lookAz = 276;
+      const z = e((t - 12) / 10); S.fov = lerp(28, 55, z); S.lookAlt = lerp(-2, 6, z);
+      S.date = new Date(Date.UTC(2026, 8, 22, 18, 2) + t / dur * 20 * 60000);
+    } else if (sc === 2) {
+      rail(false);
+      __d.title(t < 4 ? 1 : t < 5 ? 5 - t : 0);
+      if (t < 4) key = 'title';
+      seg('segView', 'space');
+      S.lat = 48.8566; S.lon = 2.3522;
+      S.date = new Date(Date.UTC(2026, 8, 22, 6, 0) + t * 6 * 60000);
+      const a = -0.5 + 1.2 * t / dur;
+      G.spaceCam.position.set(27500 * Math.sin(a), 9000, 27500 * Math.cos(a)); G.controls.target.set(0, 0, 0);
+      F.spaceCam.position.set(36000 * Math.sin(a), 42000, 36000 * Math.cos(a)); F.controls.target.set(0, 0, 0);
+    } else if (sc === 3) {
+      rail(true); seg('segView', 'observer');
+      S.lat = 48.8566; S.lon = 2.3522; S.alt = 0.002; S.lookAz = 120; S.lookAlt = 15; S.fov = 70;
+      S.date = new Date(Date.UTC(2026, 8, 22, 8, 0) + t * 60000);
+      $('when').value = S.date.toISOString().slice(0, 16);
+      const sc3 = t < 26 ? 0 : (document.scrollingElement.scrollHeight - innerHeight) * e((t - 26) / 3); window.scrollTo(0, sc3);
+      box(t < 1.5 ? null : t < 12 ? '#viewGlobe' : t < 26 ? '#viewFlat' : '.compare');
+    } else if (sc === 4) {
+      rail(true); seg('segView', 'observer'); S.fov = 70;
+      S.date = new Date(Date.UTC(2026, 8, 22, 6, 30) + t * 60000);
+      if (t < 3) { S.lat = 48.8566; S.lon = 2.3522; S.alt = 0.002; S.lookAz = 120; S.lookAlt = 15; $('place').value = 'Paris, France'; }
+      if (t >= 3 && first('syd')) { pickOpt('place', /^Sydney/); pickOpt('follow', /^sun$/); }
+      const q = 'Alice Springs', n = Math.max(0, Math.min(q.length, Math.floor((t - 17) * 3)));
+      if (t >= 17 && t < 24) { const s = $('citySearch'); if (s.value !== q.slice(0, n)) { s.value = q.slice(0, n); s.dispatchEvent(new Event('input', { bubbles: true })); } }
+      if (t >= 24 && first('pick')) { const b = document.querySelector('#cityHits button[data-i="0"]'); if (b) b.dispatchEvent(new MouseEvent('mousedown', { bubbles: true })); }
+      box(t < 2 ? null : t < 10 ? '#place' : t < 16 ? null : t < 28 ? '.csearch' : t < 40 ? '#viewFlat' : null);
+    } else if (sc === 5) {
+      rail(true);
+      S.lat = 48.2058; S.lon = -4.5539; S.fov = 70; S.lookAz = 265;
+      S.date = new Date(Date.UTC(2026, 8, 22, 17, 25) + t * 20000);
+      const lg = piece(t, [[5, Math.log10(0.002)], [13, Math.log10(11)], [17, Math.log10(11)], [26, Math.log10(408)], [30, Math.log10(408)], [36, Math.log10(20000)]]);
+      slide('alt', Math.round((lg - Math.log10(0.002)) / (Math.log10(400000) - Math.log10(0.002)) * 1000)); $('place').value = ''; S.lookAlt = 4 - dip(S.alt) * (S.alt > 2000 ? 0.92 : 1);
+      if (t < 36) { seg('segView', 'observer'); if (first('altin')) into('#alt'); box($('alt').parentElement, 8); }
+      else {
+        box(null); seg('segView', 'space');
+        const a = 0.35 * (t - 36) / (dur - 36);
+        const p = world(S.lat, S.lon, 6371 + 22000).applyAxisAngle(new THREE.Vector3(0, 1, 0), -a);
+        G.spaceCam.position.copy(p); G.controls.target.set(0, 0, 0);
+        const b = -0.3 + a; F.spaceCam.position.set(36000 * Math.sin(b), 42000, 36000 * Math.cos(b)); F.controls.target.set(0, 0, 0);
+      }
+      const ao = $('altOut'); if (ao) {}
+    } else if (sc === 6) {
+      rail(true); seg('segView', 'observer'); S.alt = 0.002; S.fov = 70;
+      S.lat = 48.8566; S.lon = 2.3522;
+      if (first('play')) { $('play').textContent = lang === 'fr' ? 'Pause' : 'Pause'; $('speed').value = '3600'; $('place').value = 'Paris, France'; into('#play'); }
+      const base = Date.UTC(2026, 8, 22, 4, 30);
+      S.date = new Date(t < 28 ? base + t * 50 * 60000 : base + 28 * 50 * 60000 + (t - 28) * 4 * 60000);
+      if (t < 17) { if (S.follow !== 'sun') { S.follow = 'sun'; $('follow').value = 'sun'; } }
+      else { if (S.follow !== 'off') { S.follow = 'off'; $('follow').value = 'off'; } const k = e((t - 17) / 4); S.lookAz = lerp(268, 360, k); S.lookAlt = lerp(2, 38, k); }
+      seg('segStars', t < 30 ? 'on' : 'trails');
+      box(t < 0.5 ? null : t < 5 ? '#play' : t < 7 ? null : t < 13 ? '#follow' : t < 30 ? null : t < 36 ? '#segStars' : null);
+    } else if (sc === 7) {
+      rail(true); S.fov = 70;
+      if (t < 2) { seg('segView', 'observer'); }
+      if (t >= 2 && first('fe')) { into('#eclipse'); pickOpt('eclipse', /Final Experiment/); window.__fe = S.date.getTime(); }
+      if (t >= 2 && t < 33) { seg('segView', 'observer'); S.date = new Date(window.__fe + (t - 2) * 48 * 60000); }
+      if (t >= 33 && first('ecl')) { pickOpt('eclipse', /Luxor|Louxor/); window.__ec = S.date.getTime(); }
+      if (t >= 33 && t < 43) { seg('segView', 'observer'); S.date = new Date(window.__ec - 90000 + (t - 33) * 15000); }
+      if (t >= 43) {
+        seg('segView', 'space'); S.date = new Date(window.__ec - 55 * 60000 + Math.min(1, (t - 43) / 24) * 62 * 60000);
+        __sim.changed(); const sd = G.light.position.clone().normalize(); G.spaceCam.position.copy(world(24, 30, 1).add(sd.multiplyScalar(0.6)).normalize().multiplyScalar(6371 + 18000)); G.controls.target.set(0, 0, 0);
+        F.spaceCam.position.set(0, 42000, 30000); F.controls.target.set(0, 0, 0);
+      }
+      S.playing = false;
+      box(t < 0.5 ? null : t < 6 ? '#eclipse' : t < 32 ? null : t < 37 ? '#eclipse' : null);
+    } else if (sc === 8) {
+      rail(true); S.lat = -33.8688; S.lon = 151.2093; S.alt = 0.002;
+      S.date = new Date(Date.UTC(2026, 8, 21, 22, 0) + t * 60000); // both ends in daylight
+      const dsec = $('drawDist').closest('details'), fsec = $('flights').closest('details');
+      if (first('dist')) { dsec.open = true; into(dsec); pickOpt('distA', /^Sydney/); pickOpt('distB', /^Santiago/); }
+      if (t >= 3 && !$('drawDist').checked) { $('drawDist').checked = true; $('drawDist').dispatchEvent(new Event('change', { bubbles: true })); }
+      if (t >= 13 && first('fl')) { fsec.open = true; into(fsec); }
+      const cb = document.querySelector('#flights input[data-k="SYD-SCL"]');
+      if (t >= 16 && !cb.checked) { cb.checked = true; cb.dispatchEvent(new Event('change', { bubbles: true })); }
+      if (t >= 2) {
+        seg('segView', 'space');
+        G.spaceCam.position.copy(world(-78, -139, 6371 + 21000)); G.controls.target.set(0, 0, 0);
+        const a = 0.2 * t / dur; F.spaceCam.position.set(-30000 * Math.sin(a + 2.6), 44000, -30000 * Math.cos(a + 2.6)); F.controls.target.set(0, 0, 0);
+      } else seg('segView', 'observer');
+      box(t < 1 ? null : t < 12 ? dsec : t < 13 ? null : t < 22 ? fsec : t < 32 ? '#fbFlat' : null);
+    } else if (sc === 9) {
+      rail(true); seg('segView', 'observer'); S.alt = 0.002; S.fov = 75;
+      S.lat = 48.8566; S.lon = 2.3522; S.date = new Date(Date.UTC(2026, 8, 22, 12, 0) + t * 30000);
+      if (first('fe')) { pickOpt('follow', /^sun$/); const d = $('feSettings'); d.open = true; into(d); window.__fe0 = { sunH: +$('fe_sunH').value, sunD: +$('fe_sunD').value, spotR: +$('fe_spotR').value, domeH: +$('fe_domeH').value }; $('place').value = 'Paris, France'; }
+      const z = window.__fe0;
+      const r = (v, st) => Math.round(v / st) * st;
+      slide('fe_sunH', r(piece(t, [[4, z.sunH], [8, 2000], [12, 9000], [15, z.sunH]]), 50));
+      slide('fe_sunD', r(piece(t, [[15, z.sunD], [18, 250], [21, z.sunD]]), 1));
+      slide('fe_spotR', r(piece(t, [[21, z.spotR], [24, 3000], [27, 20000], [30, z.spotR]]), 100));
+      slide('fe_domeH', r(piece(t, [[30, z.domeH], [33, 30000], [36, z.domeH]]), 100));
+      box(t < 2 ? null : t < 38 ? '#feSettings' : null);
+    } else if (sc === 9.5) {
+      // Music-only montage: full-screen shots, alternating the globe and the flat model.
+      const fr = lang === 'fr';
+      rail(false);
+      if (t < 36) { // North Pole, polar night, star trails: globe, then flat, then both
+        const m = t < 12 ? 'globe' : t < 24 ? 'flat' : 'both', t0 = t < 12 ? 0 : t < 24 ? 12 : 24;
+        full(m, fr ? "Pôle Nord, nuit polaire : les étoiles tournent autour de l'étoile Polaire" : 'North Pole, polar night: the stars circle Polaris');
+        seg('segView', 'observer'); seg('segStars', 'trails');
+        S.lat = 89.999; S.lon = 0; S.alt = 0.002; S.lookAz = 180; S.lookAlt = 72; S.fov = 100;
+        S.date = new Date(Date.UTC(2026, 11, 21, 0, 0) + (t - t0) * 90 * 60000);
+      } else if (t < 51) { // sunrise sweeping down the US East Coast, seen from space
+        full('globe', fr ? 'Lever du soleil sur la côte Est des États-Unis' : 'Sunrise along the US East Coast');
+        seg('segStars', 'on'); seg('segView', 'space');
+        S.lat = 40.7128; S.lon = -74.006; S.alt = 0.002;
+        S.date = new Date(Date.UTC(2026, 8, 22, 10, 0) + (t - 36) / 15 * 100 * 60000);
+        __sim.changed();
+        G.spaceCam.position.copy(world(32, -68, 6371 + 9000)); G.controls.target.set(0, 0, 0);
+      } else if (t < 63) { // the globe in space with the Sun and the Moon
+        full('globe', fr ? 'La Terre, la Lune et le Soleil (taille agrandie)' : 'Earth, Moon and Sun (enlarged scale)');
+        seg('segView', 'space'); seg('segScale', 'enlarged');
+        S.date = new Date(Date.UTC(2026, 9, 18, 6, 0) + (t - 51) * 20 * 60000);
+        __sim.changed();
+        // Look from the side, so the Earth is half lit, framing the Earth, the Moon and the Sun together.
+        const sd = G.sun.position.clone().normalize(), md = G.moon.position.clone().normalize();
+        const up = sd.clone().cross(md).normalize(); if (up.y < 0) up.negate();
+        const side = up.clone().cross(sd).normalize(); if (side.dot(md) < 0) side.negate();
+        const tg = G.sun.position.clone().multiplyScalar(0.4).addScaledVector(G.moon.position, 0.4);
+        const dir = up.multiplyScalar(0.6).add(side).normalize().applyAxisAngle(sd, -0.3 * (t - 51) / 12);
+        G.spaceCam.position.copy(tg.clone().add(dir.multiplyScalar(6371 * 28))); G.controls.target.copy(tg);
+      } else { // flat model: climb from the ground to 36,000 km
+        full('flat', fr ? "Terre Plate : du sol jusqu'à 36 000 km" : 'Flat Earth: from the ground up to 36,000 km');
+        seg('segView', 'observer');
+        S.lat = 48.8566; S.lon = 2.3522; S.lookAz = 180; S.fov = 75;
+        S.date = new Date(Date.UTC(2026, 8, 22, 11, 0));
+        S.alt = 10 ** lerp(Math.log10(0.002), Math.log10(36000), e((t - 64) / (dur - 66)));
+        S.lookAlt = lerp(3, -88, e((t - 66) / (dur - 68)));
+      }
+    } else if (sc === 10 || sc === 11) {
+      rail(false); seg('segView', 'observer');
+      S.lat = 48.2058; S.lon = -4.5539; S.alt = 0.3; S.lookAz = 276; S.fov = 50; S.lookAlt = 2;
+      S.date = new Date(Date.UTC(2026, 8, 22, 18, 9));
+      endCard(1, sc === 11, lang); key = 'end' + sc;
+    }
+    if (sc !== 3) $('when').value = S.date.toISOString().slice(0, 16);
+    __sim.changed();
+    return key;
+  };
+})();
+  // Driver: a black lead-in while the page settles, then the scenes play in real time, one after another.
+  const LEAD = +(P.get("lead") || 4), FROM = +(P.get("from") || 0), black = document.getElementById("dblack");
+  __scene(list[0], 0, DUR0[list[0]], lang);
+  let t0 = null;
+  const tick = now => {
+    if (t0 === null) t0 = now;
+    let t = (now - t0) / 1000 - LEAD + FROM;
+    black.style.display = t < 0 ? "flex" : "none";
+    if (t < 0) { __scene(list[0], 0, DUR0[list[0]], lang); requestAnimationFrame(tick); return; }
+    for (const sc of list) {
+      if (t < DUR[sc] || sc === list[list.length - 1]) {
+        const lt = Math.min(t, DUR[sc] - 0.001);
+        __scene(sc, warp(sc, lt), DUR0[sc], lang); __d.cap(showCap ? captionAt(sc, lt) : "");
+        if (t >= DUR[sc]) { document.title = "DEMO DONE"; return; }
+        break;
+      }
+      t -= DUR[sc];
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
 })();
 </script>
